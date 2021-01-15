@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">godswars</string>
+
+    <string name="menu_action_init_map">Создать карту</string>
+    <string name="menu_action_restart_map">Сбросить карту</string>
+    <string name="menu_action_restart_player">Сбросить выбор игроков</string>
+
+    <string name="start_game_text">Начать игру</string>
+    <string name="create_map">Создать карту</string>
+
+    <string name="select_guest">Выбрать гостя</string>
+    <string name="select_watchman">Выбрать ИИ</string>
+
+    <string name="end_turn">Закончить ход</string>
+    <string name="end_placement">Закончить размещение</string>
+</resources>

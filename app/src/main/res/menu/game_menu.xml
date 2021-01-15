@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_init_map"
+        android:title="@string/menu_action_init_map" />
+
+    <item
+        android:id="@+id/action_restart_map"
+        android:title="@string/menu_action_restart_map" />
+
+    <item
+        android:id="@+id/action_restart_player"
+        android:title="@string/menu_action_restart_player" />
+</menu>

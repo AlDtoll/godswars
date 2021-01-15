@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "834748598229",
+    "firebase_url": "https://godswars.firebaseio.com",
+    "project_id": "godswars",
+    "storage_bucket": "godswars.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834748598229:android:08d5729e8abd46292c5f5c",
+        "android_client_info": {
+          "package_name": "aldtoll.godswars"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "834748598229-s6kcf2mm83tpfl7jrg3vq3doqtk4nu94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEZ0BE3y-mhrDIfsOA0BDcHI4WxM7G-8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "834748598229-s6kcf2mm83tpfl7jrg3vq3doqtk4nu94.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/cellsPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_small"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/reactorCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_reactor" />
+
+        <ImageView
+            android:id="@+id/engineCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_engine" />
+
+        <ImageView
+            android:id="@+id/bridgeCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_servers" />
+
+        <ImageView
+            android:id="@+id/terminalCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_terminal" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/actionPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cellsPanel"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_action_point" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cells"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/padding_small"
+        android:clipToPadding="true"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionPoints"
+        tools:itemCount="121"
+        tools:listitem="@layout/item_cell"
+        tools:spanCount="11" />
+
+    <Button
+        android:id="@+id/endTurnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_game_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

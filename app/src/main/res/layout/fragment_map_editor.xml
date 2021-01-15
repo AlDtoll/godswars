@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/cellsPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_small"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/roomCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@color/green_background_color" />
+
+        <ImageView
+            android:id="@+id/emptyCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_empty_cell" />
+
+        <ImageView
+            android:id="@+id/wallCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_wall" />
+
+        <ImageView
+            android:id="@+id/doorCell"
+            android:layout_width="@dimen/wall_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_vertical_door_locked" />
+
+        <ImageView
+            android:id="@+id/pierCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:background="@drawable/ic_pier_cell" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cells"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/padding_small"
+        android:clipToPadding="true"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cellsPanel"
+        tools:itemCount="121"
+        tools:listitem="@layout/item_cell"
+        tools:spanCount="11" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_big">32dp</dimen>
+
+    <dimen name="room_size">36dp</dimen>
+    <dimen name="wall_size">18dp</dimen>
+    <dimen name="action_point_size">18dp</dimen>
+    <dimen name="search_bar_padding_end">72dp</dimen>
+
+    <dimen name="quest_select_block_height">340dp</dimen>
+</resources>
