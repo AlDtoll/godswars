@@ -2,7 +2,6 @@ package aldtoll.godswars.screen.game_screen
 
 import aldtoll.godswars.R
 import aldtoll.godswars.domain.model.*
-import aldtoll.godswars.screen.map_screen.MapEditorCellsAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_cell.view.*
 
 class GameCellsAdapter(
-    private val callback: MapEditorCellsAdapter.Callback,
+    private val callback: Callback,
     private val numberOfCellsAndWalls: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -75,15 +74,15 @@ class GameCellsAdapter(
         holder.itemView.run {
             this.setOnClickListener {
                 val type = callback.clickCell()
-                if (type != Cell.Type.DOOR || !(holder.itemViewType == HORIZONTAL_WALL || holder.itemViewType == VERTICAL_WALL)) {
-                    items.removeAt(position)
+                val canPlaceElement = holder.itemViewType == ROOM && items[position] !is Pier
+                if (canPlaceElement) {
+                    val removeAt = items.removeAt(position)
                     val newCell = when (type) {
-                        Cell.Type.ROOM -> Room()
-                        Cell.Type.WALL -> Wall()
-                        Cell.Type.DOOR -> Door(holder.itemViewType == HORIZONTAL_WALL)
-                        Cell.Type.EMPTY -> Empty()
-                        Cell.Type.PIER -> Pier()
-                        else -> Empty()
+                        Cell.Type.REACTOR -> Reactor()
+                        Cell.Type.ENGINE -> Engine()
+                        Cell.Type.BRIDGE -> Bridge()
+                        Cell.Type.TERMINAL -> Terminal()
+                        else -> removeAt
                     }
                     items.add(position, newCell)
                     notifyDataSetChanged()

@@ -4,6 +4,8 @@ import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.storage.*
 import aldtoll.godswars.routing.*
+import aldtoll.godswars.screen.game_screen.GameScreenViewModel
+import aldtoll.godswars.screen.game_screen.IGameScreenViewModel
 import aldtoll.godswars.screen.map_screen.IMapEditorScreenViewModel
 import aldtoll.godswars.screen.map_screen.MapScreenEditorScreenViewModel
 import aldtoll.godswars.screen.select_player_screen.ISelectPlayerScreenViewModel
@@ -25,6 +27,7 @@ val appModule = module {
 
     single { StartScreenViewModel(get(), get()) as IStartScreenViewModel }
     single { MapScreenEditorScreenViewModel(get(), get()) as IMapEditorScreenViewModel }
+    single { GameScreenViewModel(get()) as IGameScreenViewModel }
     single {
         SelectPlayerScreenViewModel(
             get(),

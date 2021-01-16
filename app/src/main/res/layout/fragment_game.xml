@@ -46,6 +46,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/gameScreenPlayerTurnStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cellsPanel"
+        tools:text="Твой ход" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/actionPoints"
         android:layout_width="wrap_content"
@@ -54,7 +62,7 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cellsPanel"
+        app:layout_constraintTop_toBottomOf="@id/gameScreenPlayerTurnStatus"
         tools:itemCount="5"
         tools:listitem="@layout/item_action_point" />
 
@@ -77,6 +85,7 @@
         android:id="@+id/endTurnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="@string/start_game_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

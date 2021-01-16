@@ -74,7 +74,10 @@ class MapEditorCellsAdapter(
         holder.itemView.run {
             this.setOnClickListener {
                 val type = callback.clickCell()
-                if (type != Cell.Type.DOOR || !(holder.itemViewType == HORIZONTAL_WALL || holder.itemViewType == VERTICAL_WALL)) {
+                val canPlaceWall =
+                    type != Cell.Type.DOOR || holder.itemViewType == HORIZONTAL_WALL || holder.itemViewType == VERTICAL_WALL
+                val canPlacePier = type != Cell.Type.PIER || holder.itemViewType == ROOM
+                if (canPlaceWall && canPlacePier) {
                     items.removeAt(position)
                     val newCell = when (type) {
                         Cell.Type.ROOM -> Room()
