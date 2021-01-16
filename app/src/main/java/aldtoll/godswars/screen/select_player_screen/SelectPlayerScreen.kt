@@ -22,7 +22,7 @@ class SelectPlayerScreen : Fragment() {
 
     private val selectPlayerScreenViewModel: ISelectPlayerScreenViewModel by inject()
     private var remoteGuestName = ""
-    private var remoteWatchmanName = " "
+    private var remoteWatchmanName = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +48,7 @@ class SelectPlayerScreen : Fragment() {
             myRef.setValue(name)
 
             pref?.run {
-                this.edit().putString("guestName", name).apply()
+                this.edit().putString("playerName", name).apply()
             }
         }
 
@@ -58,7 +58,7 @@ class SelectPlayerScreen : Fragment() {
             myRef.setValue(name)
 
             pref?.run {
-                this.edit().putString("watchmanName", name).apply()
+                this.edit().putString("playerName", name).apply()
             }
         }
 
@@ -83,48 +83,53 @@ class SelectPlayerScreen : Fragment() {
 
     private fun defineElementStatus() {
         val pref = App.getPref()
-        val storedGuestName = pref?.getString("guestName", "") ?: ""
-        val storedWatchmanName = pref?.getString("watchmanName", "") ?: ""
+        val storedName = pref?.getString("playerName", "") ?: ""
+        guestName.setText(remoteGuestName)
+        watchmanName.setText(remoteWatchmanName)
         if (remoteGuestName.isNotEmpty()) {
             selectGuestButton.isEnabled = false
-            guestName.setText(remoteGuestName)
             guestName.isEnabled = false
-            if (storedGuestName.isNotEmpty()) {
-                if (storedGuestName == remoteGuestName) {
-                    guestDescription.text = "вы уже гость"
-                    watchmanName.isEnabled = false
-                    selectWatchmanButton.isEnabled = false
-                } else {
-                    guestDescription.text = "место гостя уже занял $remoteGuestName"
-                }
-            }
         } else {
-            if (storedWatchmanName.isEmpty() || remoteWatchmanName.isEmpty() || storedWatchmanName != remoteWatchmanName) {
-                selectGuestButton.isEnabled = true
-                guestName.setText("")
-                guestName.isEnabled = true
-                guestDescription.text = ""
-            }
+            selectGuestButton.isEnabled = true
+            guestName.isEnabled = true
         }
-
         if (remoteWatchmanName.isNotEmpty()) {
             selectWatchmanButton.isEnabled = false
-            watchmanName.setText(remoteWatchmanName)
             watchmanName.isEnabled = false
-            if (storedWatchmanName.isNotEmpty()) {
-                if (storedWatchmanName == remoteWatchmanName) {
-                    watchmanDescription.text = "вы уже ИИ"
+        } else {
+            selectWatchmanButton.isEnabled = true
+            watchmanName.isEnabled = true
+        }
+
+        if (storedName.isNotEmpty()) {
+            when (storedName) {
+                remoteGuestName -> {
+                    guestDescription.text = "вы уже гость"
+                    selectWatchmanButton.isEnabled = false
                     watchmanName.isEnabled = false
+                }
+                remoteWatchmanName -> {
+                    watchmanDescription.text = "вы уже ИИ"
                     selectGuestButton.isEnabled = false
-                } else {
-                    watchmanDescription.text = "место ИИ уже занял $remoteWatchmanName"
+                    guestName.isEnabled = false
+                }
+                else -> {
+                    currentStatusGame.text =
+                        "ваше имя $storedName не принадлежит ни гостю, ни ИИ. Возможно кто-то сбросил игру, попробуйте сбросить имена игроков локально"
+                    startGameButton.isEnabled = false
+                    guestDescription.text = ""
+                    watchmanDescription.text = ""
                 }
             }
         } else {
-            if (storedGuestName.isEmpty() || remoteGuestName.isEmpty() || storedGuestName != remoteGuestName) {
-                selectWatchmanButton.isEnabled = true
-                watchmanName.setText("")
-                watchmanName.isEnabled = true
+            if (remoteGuestName.isNotEmpty()) {
+                guestDescription.text = "место гостя уже занял $remoteGuestName"
+            } else {
+                guestDescription.text = ""
+            }
+            if (remoteWatchmanName.isNotEmpty()) {
+                watchmanDescription.text = "место ИИ уже занял $remoteWatchmanName"
+            } else {
                 watchmanDescription.text = ""
             }
         }

@@ -55,8 +55,7 @@ class MainViewModel(
         routeToStartScreenInteractor.execute()
         val pref = App.getPref()
         pref?.run {
-            this.edit().putString("guestName", "").apply()
-            this.edit().putString("watchmanName", "").apply()
+            this.edit().putString("playerName", "").apply()
         }
         databaseInteractor.clearPlayerName()
 
