@@ -27,7 +27,7 @@ val appModule = module {
 
     single { StartScreenViewModel(get(), get()) as IStartScreenViewModel }
     single { MapScreenEditorScreenViewModel(get(), get()) as IMapEditorScreenViewModel }
-    single { GameScreenViewModel(get()) as IGameScreenViewModel }
+    single { GameScreenViewModel(get(), get(), get(), get(), get(), get()) as IGameScreenViewModel }
     single {
         SelectPlayerScreenViewModel(
             get(),
@@ -37,12 +37,14 @@ val appModule = module {
         ) as ISelectPlayerScreenViewModel
     }
 
-    single { DatabaseInteractor(get(), get(), get(), get()) as IDatabaseInteractor }
+    single { DatabaseInteractor(get(), get(), get(), get(), get(), get()) as IDatabaseInteractor }
 
     single { CellsListInteractor() as ICellsListInteractor }
     single { GuestNameInteractor() as IGuestNameInteractor }
     single { WatchmanNameInteractor() as IWatchmanNameInteractor }
     single { PlayerTurnInteractor() as IPlayerTurnInteractor }
+    single { PlacedInteractor() as IPlacedInteractor }
+    single { ArrivedInteractor() as IArrivedInteractor }
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }

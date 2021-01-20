@@ -50,7 +50,7 @@ class SelectPlayerScreenViewModel(
         )
 
     override fun startGame() {
-        databaseInteractor.savePlayerTurn()
+        databaseInteractor.giveTurnToWatchman()
         routeToGameScreenInteractor.execute()
     }
 }

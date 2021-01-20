@@ -14,5 +14,11 @@ interface IDatabaseInteractor {
 
     fun clearPlayerName()
 
-    fun savePlayerTurn()
+    fun giveTurnToWatchman()
+
+    fun giveTurnToGuest()
+
+    fun placed()
+
+    fun arrived()
 }

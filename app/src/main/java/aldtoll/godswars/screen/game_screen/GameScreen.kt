@@ -21,6 +21,8 @@ class GameScreen : Fragment() {
     }
 
     private var isGuest = false
+    private var isPlaced = false
+    private var isArrived = false
     private var type: Cell.Type = Cell.Type.ROOM
     private val gameScreenViewModel: IGameScreenViewModel by inject()
 
@@ -44,6 +46,33 @@ class GameScreen : Fragment() {
             }
         })
 
+        gameScreenViewModel.isGuestData().observe(viewLifecycleOwner, Observer {
+            it?.run {
+                isGuest = it
+                //todo свой интерактор
+                cellsPanel.visibility = if (!isGuest && !isPlaced) View.VISIBLE else View.GONE
+            }
+        })
+
+        gameScreenViewModel.isYourTurnData().observe(viewLifecycleOwner, Observer {
+            it?.run {
+                endTurnButton.isEnabled = it
+            }
+        })
+
+        gameScreenViewModel.isPlacedData().observe(viewLifecycleOwner, Observer {
+            it?.run {
+                isPlaced = it
+                cellsPanel.visibility = if (!isGuest && !isPlaced) View.VISIBLE else View.GONE
+            }
+        })
+
+        gameScreenViewModel.isArrivedData().observe(viewLifecycleOwner, Observer {
+            it?.run {
+                isArrived = it
+            }
+        })
+
         reactorCell.setOnClickListener {
             type = Cell.Type.REACTOR
         }
@@ -55,6 +84,16 @@ class GameScreen : Fragment() {
         }
         terminalCell.setOnClickListener {
             type = Cell.Type.TERMINAL
+        }
+
+        endTurnButton.setOnClickListener {
+            if (!isPlaced && !isGuest) {
+                gameScreenViewModel.placed()
+            }
+            if (!isArrived && isGuest) {
+                gameScreenViewModel.arrived()
+            }
+            gameScreenViewModel.endTurn(isGuest)
         }
 
         initRecyclerView()
