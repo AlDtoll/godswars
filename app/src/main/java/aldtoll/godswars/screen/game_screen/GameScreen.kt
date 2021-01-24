@@ -79,13 +79,7 @@ class GameScreen : Fragment() {
         createCellsPanel()
 
         endTurnButton.setOnClickListener {
-            if (!isPlaced && !isGuest) {
-                gameScreenViewModel.placed()
-            }
-            if (!isArrived && isGuest) {
-                gameScreenViewModel.arrived()
-            }
-            gameScreenViewModel.endTurn(isGuest)
+            gameScreenViewModel.endTurn()
         }
 
         initRecyclerView()

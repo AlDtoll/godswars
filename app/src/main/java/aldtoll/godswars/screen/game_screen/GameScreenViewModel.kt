@@ -30,10 +30,19 @@ class GameScreenViewModel(
         )
     }
 
-    override fun endTurn(isGuest: Boolean) {
+    override fun endTurn() {
+        val isGuest = guestNameInteractor.value() == App.getPref()?.getString("playerName", "")
+        val placed = placedInteractor.value()
+        val arrived = arrivedInteractor.value()
         if (isGuest) {
+            if (!arrived) {
+                arrived()
+            }
             databaseInteractor.giveTurnToWatchman()
         } else {
+            if (!placed) {
+                placed()
+            }
             databaseInteractor.giveTurnToGuest()
         }
         databaseInteractor.saveMap()

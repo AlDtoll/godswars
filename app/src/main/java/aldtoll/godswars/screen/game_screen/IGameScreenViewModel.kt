@@ -10,7 +10,7 @@ interface IGameScreenViewModel {
 
     fun cellsData(): LiveData<MutableList<Cell>>
 
-    fun endTurn(isGuest: Boolean)
+    fun endTurn()
 
     fun isGuestData(): LiveData<Boolean>
 
