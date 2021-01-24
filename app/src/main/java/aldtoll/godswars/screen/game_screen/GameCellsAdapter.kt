@@ -76,13 +76,37 @@ class GameCellsAdapter(
                 val type = callback.clickCell()
                 val canPlaceElement = holder.itemViewType == ROOM && items[position] !is Pier
                 if (canPlaceElement) {
-                    val removeAt = items.removeAt(position)
+                    val removedCell = items.removeAt(position)
                     val newCell = when (type) {
-                        Cell.Type.REACTOR -> Reactor()
-                        Cell.Type.ENGINE -> Engine()
-                        Cell.Type.BRIDGE -> Bridge()
-                        Cell.Type.TERMINAL -> Terminal()
-                        else -> removeAt
+                        Cell.Type.REACTOR -> {
+                            if (removedCell is Reactor) {
+                                Room()
+                            } else {
+                                Reactor()
+                            }
+                        }
+                        Cell.Type.ENGINE -> {
+                            if (removedCell is Engine) {
+                                Room()
+                            } else {
+                                Engine()
+                            }
+                        }
+                        Cell.Type.BRIDGE -> {
+                            if (removedCell is Bridge) {
+                                Room()
+                            } else {
+                                Bridge()
+                            }
+                        }
+                        Cell.Type.TERMINAL -> {
+                            if (removedCell is Terminal) {
+                                Room()
+                            } else {
+                                Terminal()
+                            }
+                        }
+                        else -> removedCell
                     }
                     items.add(position, newCell)
                     notifyDataSetChanged()

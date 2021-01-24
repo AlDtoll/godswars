@@ -21,28 +21,33 @@
             android:layout_width="@dimen/room_size"
             android:layout_height="@dimen/room_size"
             android:layout_marginStart="@dimen/room_size"
-            android:background="@drawable/ic_reactor" />
+            android:padding="1dp"
+            android:src="@drawable/ic_reactor"
+            tools:background="@color/select_color" />
 
         <ImageView
             android:id="@+id/engineCell"
             android:layout_width="@dimen/room_size"
             android:layout_height="@dimen/room_size"
             android:layout_marginStart="@dimen/room_size"
-            android:background="@drawable/ic_engine" />
+            android:padding="1dp"
+            android:src="@drawable/ic_engine" />
 
         <ImageView
             android:id="@+id/bridgeCell"
             android:layout_width="@dimen/room_size"
             android:layout_height="@dimen/room_size"
             android:layout_marginStart="@dimen/room_size"
-            android:background="@drawable/ic_servers" />
+            android:padding="1dp"
+            android:src="@drawable/ic_servers" />
 
         <ImageView
             android:id="@+id/terminalCell"
             android:layout_width="@dimen/room_size"
             android:layout_height="@dimen/room_size"
             android:layout_marginStart="@dimen/room_size"
-            android:background="@drawable/ic_terminal" />
+            android:padding="1dp"
+            android:src="@drawable/ic_terminal" />
 
     </LinearLayout>
 

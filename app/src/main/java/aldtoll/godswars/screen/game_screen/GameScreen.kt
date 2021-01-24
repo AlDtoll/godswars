@@ -73,18 +73,7 @@ class GameScreen : Fragment() {
             }
         })
 
-        reactorCell.setOnClickListener {
-            type = Cell.Type.REACTOR
-        }
-        engineCell.setOnClickListener {
-            type = Cell.Type.ENGINE
-        }
-        bridgeCell.setOnClickListener {
-            type = Cell.Type.BRIDGE
-        }
-        terminalCell.setOnClickListener {
-            type = Cell.Type.TERMINAL
-        }
+        createCellsPanel()
 
         endTurnButton.setOnClickListener {
             if (!isPlaced && !isGuest) {
@@ -97,6 +86,33 @@ class GameScreen : Fragment() {
         }
 
         initRecyclerView()
+    }
+
+    private fun createCellsPanel() {
+        reactorCell.setOnClickListener {
+            colorCell(it)
+            type = Cell.Type.REACTOR
+        }
+        engineCell.setOnClickListener {
+            colorCell(it)
+            type = Cell.Type.ENGINE
+        }
+        bridgeCell.setOnClickListener {
+            colorCell(it)
+            type = Cell.Type.BRIDGE
+        }
+        terminalCell.setOnClickListener {
+            colorCell(it)
+            type = Cell.Type.TERMINAL
+        }
+    }
+
+    private fun colorCell(panelCell: View) {
+        reactorCell.setBackgroundColor(resources.getColor(android.R.color.white))
+        engineCell.setBackgroundColor(resources.getColor(android.R.color.white))
+        bridgeCell.setBackgroundColor(resources.getColor(android.R.color.white))
+        terminalCell.setBackgroundColor(resources.getColor(android.R.color.white))
+        panelCell.setBackgroundColor(resources.getColor(R.color.select_color))
     }
 
     private val callback = object : GameCellsAdapter.Callback {
