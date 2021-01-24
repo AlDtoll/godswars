@@ -49,8 +49,6 @@ class GameScreen : Fragment() {
         gameScreenViewModel.isGuestData().observe(viewLifecycleOwner, Observer {
             it?.run {
                 isGuest = it
-                //todo свой интерактор
-                cellsPanel.visibility = if (!isGuest && !isPlaced) View.VISIBLE else View.GONE
             }
         })
 
@@ -60,10 +58,15 @@ class GameScreen : Fragment() {
             }
         })
 
+        gameScreenViewModel.cellsPanelVisibilityData().observe(viewLifecycleOwner, Observer {
+            it?.run {
+                cellsPanel.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        })
+
         gameScreenViewModel.isPlacedData().observe(viewLifecycleOwner, Observer {
             it?.run {
                 isPlaced = it
-                cellsPanel.visibility = if (!isGuest && !isPlaced) View.VISIBLE else View.GONE
             }
         })
 

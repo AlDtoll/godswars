@@ -24,4 +24,6 @@ interface IGameScreenViewModel {
 
     fun arrived()
 
+    fun cellsPanelVisibilityData(): LiveData<Boolean>
+
 }

@@ -7,6 +7,8 @@ import aldtoll.godswars.domain.storage.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import java.util.*
 
 class GameScreenViewModel(
@@ -71,5 +73,18 @@ class GameScreenViewModel(
 
     override fun arrived() {
         databaseInteractor.arrived()
+    }
+
+    override fun cellsPanelVisibilityData(): LiveData<Boolean> {
+        val observable = Observable.combineLatest(
+            guestNameInteractor.get(),
+            placedInteractor.get(),
+            BiFunction { guestName: String, placed: Boolean ->
+                guestName != App.getPref()?.getString("playerName", "") && !placed
+            }
+        )
+        return LiveDataReactiveStreams.fromPublisher(
+            observable.toFlowable(BackpressureStrategy.LATEST)
+        )
     }
 }
