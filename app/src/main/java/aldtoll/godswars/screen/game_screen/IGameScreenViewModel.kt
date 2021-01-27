@@ -26,4 +26,6 @@ interface IGameScreenViewModel {
 
     fun cellsPanelVisibilityData(): LiveData<Boolean>
 
+    fun turnButtonTextData(): LiveData<String>
+
 }

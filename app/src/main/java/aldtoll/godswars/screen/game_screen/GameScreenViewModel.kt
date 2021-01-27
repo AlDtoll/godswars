@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import java.util.*
 
 class GameScreenViewModel(
@@ -19,6 +20,8 @@ class GameScreenViewModel(
     private val placedInteractor: IPlacedInteractor,
     private val arrivedInteractor: IArrivedInteractor
 ) : IGameScreenViewModel {
+
+    private val playerName = App.getPref()?.getString("playerName", "")
 
     override fun saveCells(cells: ArrayList<Cell>) {
         cellsListInteractor.update(cells)
@@ -31,7 +34,7 @@ class GameScreenViewModel(
     }
 
     override fun endTurn() {
-        val isGuest = guestNameInteractor.value() == App.getPref()?.getString("playerName", "")
+        val isGuest = guestNameInteractor.value() == playerName
         val placed = placedInteractor.value()
         val arrived = arrivedInteractor.value()
         if (isGuest) {
@@ -50,14 +53,14 @@ class GameScreenViewModel(
 
     override fun isGuestData(): LiveData<Boolean> {
         return LiveDataReactiveStreams.fromPublisher(
-            guestNameInteractor.get().map { it == App.getPref()?.getString("playerName", "") }
+            guestNameInteractor.get().map { it == playerName }
                 .toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
     override fun isYourTurnData(): LiveData<Boolean> {
         return LiveDataReactiveStreams.fromPublisher(
-            playerTurnInteractor.get().map { it == App.getPref()?.getString("playerName", "") }
+            playerTurnInteractor.get().map { it == playerName }
                 .toFlowable(BackpressureStrategy.LATEST)
         )
     }
@@ -89,7 +92,33 @@ class GameScreenViewModel(
             guestNameInteractor.get(),
             placedInteractor.get(),
             BiFunction { guestName: String, placed: Boolean ->
-                guestName != App.getPref()?.getString("playerName", "") && !placed
+                guestName != playerName && !placed
+            }
+        )
+        return LiveDataReactiveStreams.fromPublisher(
+            observable.toFlowable(BackpressureStrategy.LATEST)
+        )
+    }
+
+    override fun turnButtonTextData(): LiveData<String> {
+        val observable = Observable.combineLatest(
+            placedInteractor.get().startWith(false),
+            arrivedInteractor.get().startWith(false),
+            guestNameInteractor.get(),
+            Function3 { placed: Boolean, arrived: Boolean, guestName: String ->
+                if (guestName == playerName) {
+                    if (!arrived) {
+                        "Пристыковаться"
+                    } else {
+                        "Закончить ход"
+                    }
+                } else {
+                    if (!placed) {
+                        "Закончить размещение"
+                    } else {
+                        "Закончить ход"
+                    }
+                }
             }
         )
         return LiveDataReactiveStreams.fromPublisher(
