@@ -174,10 +174,10 @@ class DatabaseInteractor(
     }
 
     override fun saveGuestName() {
-//        val database = Firebase.database
-//        val myRef = database.getReference("guestName")
-//
-//        myRef.setValue(guestNameInteractor.value())
+        val database = Firebase.database
+        val myRef = database.getReference("guestName")
+
+        myRef.setValue(guestNameInteractor.value())
     }
 
     override fun saveWatchmanName() {

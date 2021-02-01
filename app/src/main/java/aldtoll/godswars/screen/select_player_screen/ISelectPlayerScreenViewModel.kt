@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 
 interface ISelectPlayerScreenViewModel {
 
-    fun selectGuest()
+    fun selectGuest(guestName: String)
 
-    fun selectWatchman()
+    fun selectWatchman(watchmanName: String)
 
     fun guestNameChange(name: String)
 

@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_select_player.*
 import org.koin.android.ext.android.inject
 
@@ -38,28 +36,13 @@ class SelectPlayerScreen : Fragment() {
     }
 
     private fun initUi() {
-        val pref = App.getPref()
-        val database = Firebase.database
 
         selectGuestButton.setOnClickListener {
-
-            val myRef = database.getReference("guestName")
-            val name = guestName.text.toString()
-            myRef.setValue(name)
-
-            pref?.run {
-                this.edit().putString("playerName", name).apply()
-            }
+            selectPlayerScreenViewModel.selectGuest(guestName.text.toString())
         }
 
         selectWatchmanButton.setOnClickListener {
-            val myRef = database.getReference("watchmanName")
-            val name = watchmanName.text.toString()
-            myRef.setValue(name)
-
-            pref?.run {
-                this.edit().putString("playerName", name).apply()
-            }
+            selectPlayerScreenViewModel.selectWatchman(watchmanName.text.toString())
         }
 
         startGameButton.setOnClickListener {

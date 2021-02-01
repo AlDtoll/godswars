@@ -7,6 +7,8 @@ import aldtoll.godswars.domain.storage.IWatchmanNameInteractor
 import aldtoll.godswars.routing.RouteToGameScreenInteractor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import io.reactivex.BackpressureStrategy
 import io.reactivex.subjects.PublishSubject
 
@@ -18,17 +20,25 @@ class SelectPlayerScreenViewModel(
 ) : ISelectPlayerScreenViewModel {
 
     private var guestName = PublishSubject.create<String>()
+    val database = Firebase.database
 
-    override fun selectWatchman() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun selectWatchman(watchmanName: String) {
+        val myRef = database.getReference("watchmanName")
+        myRef.setValue(watchmanName)
+        saveLocalPlayerName(watchmanName)
     }
 
-    override fun selectGuest() {
+    override fun selectGuest(guestName: String) {
+        val myRef = database.getReference("guestName")
+        myRef.setValue(guestName)
+        saveLocalPlayerName(guestName)
+    }
+
+    private fun saveLocalPlayerName(watchmanName: String) {
         val pref = App.getPref()
         pref?.run {
-            //            this.edit().putString("Name", guestName).apply()
+            this.edit().putString("playerName", watchmanName).apply()
         }
-        databaseInteractor.saveGuestName()
     }
 
     override fun guestNameChange(name: String) {
