@@ -60,7 +60,10 @@ class SelectPlayerScreenViewModel(
         )
 
     override fun startGame() {
-        databaseInteractor.giveTurnToWatchman()
+        //todo нужно переделать, когда можно будет пропускать экран выбора игрока
+        if (watchmanNameInteractor.value().isEmpty()) {
+            databaseInteractor.giveTurnToWatchman()
+        }
         routeToGameScreenInteractor.execute()
     }
 }
