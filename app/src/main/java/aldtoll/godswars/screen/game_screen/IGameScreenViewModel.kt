@@ -14,7 +14,7 @@ interface IGameScreenViewModel {
 
     fun isGuestData(): LiveData<Boolean>
 
-    fun isYourTurnData(): LiveData<Boolean>
+    fun enableTurnButtonData(): LiveData<Boolean>
 
     fun isPlacedData(): LiveData<Boolean>
 

@@ -11,4 +11,6 @@ data class Terminal(
     override fun getDrawable(): Int {
         return R.drawable.ic_terminal
     }
+
+    override fun getType(): Cell.Type = Cell.Type.TERMINAL
 }

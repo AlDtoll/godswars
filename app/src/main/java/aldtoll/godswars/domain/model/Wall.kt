@@ -13,4 +13,6 @@ data class Wall(
         return R.drawable.ic_wall
     }
 
+    override fun getType(): Cell.Type = Cell.Type.WALL
+
 }

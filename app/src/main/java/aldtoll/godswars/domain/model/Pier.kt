@@ -11,4 +11,6 @@ data class Pier(
     override fun getDrawable(): Int {
         return R.drawable.ic_pier_cell
     }
+
+    override fun getType(): Cell.Type = Cell.Type.PIER
 }

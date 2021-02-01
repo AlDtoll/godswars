@@ -11,4 +11,6 @@ data class Bridge(
     override fun getDrawable(): Int {
         return R.drawable.ic_servers
     }
+
+    override fun getType(): Cell.Type = Cell.Type.BRIDGE
 }

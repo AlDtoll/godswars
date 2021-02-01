@@ -14,4 +14,6 @@ data class Door(
         return if (horizontal) R.drawable.ic_horizontal_door_locked else R.drawable.ic_vertical_door_locked
     }
 
+    override fun getType(): Cell.Type = Cell.Type.DOOR
+
 }

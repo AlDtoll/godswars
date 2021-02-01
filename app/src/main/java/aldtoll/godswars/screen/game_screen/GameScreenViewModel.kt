@@ -10,6 +10,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
+import io.reactivex.functions.Function5
 import java.util.*
 
 class GameScreenViewModel(
@@ -58,9 +59,33 @@ class GameScreenViewModel(
         )
     }
 
-    override fun isYourTurnData(): LiveData<Boolean> {
+    override fun enableTurnButtonData(): LiveData<Boolean> {
+        val observable = Observable.combineLatest(
+            playerTurnInteractor.get(),
+            guestNameInteractor.get(),
+            arrivedInteractor.get(),
+            placedInteractor.get(),
+            cellsListInteractor.get(),
+            Function5 { name: String, guestName: String, arrived: Boolean, placed: Boolean, cells: MutableList<Cell> ->
+                if (playerName != name) {
+                    return@Function5 false
+                } else {
+                    if (guestName == playerName) {
+                        true
+                    } else {
+                        if (!placed) {
+                            cells.filter { it.getType() == Cell.Type.ENGINE }.size == 1 &&
+                                    cells.filter { it.getType() == Cell.Type.BRIDGE }.size == 1 &&
+                                    cells.filter { it.getType() == Cell.Type.REACTOR }.size == 1
+                        } else {
+                            true
+                        }
+                    }
+                }
+            }
+        )
         return LiveDataReactiveStreams.fromPublisher(
-            playerTurnInteractor.get().map { it == playerName }
+            observable
                 .toFlowable(BackpressureStrategy.LATEST)
         )
     }

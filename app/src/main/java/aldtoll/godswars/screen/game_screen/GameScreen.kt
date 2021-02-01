@@ -52,7 +52,7 @@ class GameScreen : Fragment() {
             }
         })
 
-        gameScreenViewModel.isYourTurnData().observe(viewLifecycleOwner, Observer {
+        gameScreenViewModel.enableTurnButtonData().observe(viewLifecycleOwner, Observer {
             it?.run {
                 endTurnButton.isEnabled = it
             }

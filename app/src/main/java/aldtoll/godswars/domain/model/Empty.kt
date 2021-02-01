@@ -12,4 +12,5 @@ data class Empty(
         return R.drawable.ic_empty_cell
     }
 
+    override fun getType(): Cell.Type = Cell.Type.EMPTY
 }

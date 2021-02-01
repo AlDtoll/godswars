@@ -11,4 +11,6 @@ data class Reactor(
     override fun getDrawable(): Int {
         return R.drawable.ic_reactor
     }
+
+    override fun getType(): Cell.Type = Cell.Type.REACTOR
 }

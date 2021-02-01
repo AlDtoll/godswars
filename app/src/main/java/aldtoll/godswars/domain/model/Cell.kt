@@ -23,6 +23,8 @@ interface Cell {
 
     fun getDrawable(): Int
 
+    fun getType(): Type
+
     enum class Type {
         ROOM,
         WALL,

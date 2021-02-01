@@ -11,4 +11,6 @@ data class Room(
     override fun getDrawable(): Int {
         return R.drawable.ic_room
     }
+
+    override fun getType(): Cell.Type = Cell.Type.ROOM
 }

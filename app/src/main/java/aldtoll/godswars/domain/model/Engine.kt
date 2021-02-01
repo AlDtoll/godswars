@@ -11,4 +11,6 @@ data class Engine(
     override fun getDrawable(): Int {
         return R.drawable.ic_engine
     }
+
+    override fun getType(): Cell.Type = Cell.Type.ENGINE
 }
