@@ -64,6 +64,12 @@ class GameScreen : Fragment() {
             }
         })
 
+        gameScreenViewModel.currentStatusTextData().observe(viewLifecycleOwner, Observer {
+            it?.run {
+                gameScreenPlayerTurnStatus.text = it
+            }
+        })
+
         gameScreenViewModel.cellsPanelVisibilityData().observe(viewLifecycleOwner, Observer {
             it?.run {
                 cellsPanel.visibility = if (it) View.VISIBLE else View.GONE

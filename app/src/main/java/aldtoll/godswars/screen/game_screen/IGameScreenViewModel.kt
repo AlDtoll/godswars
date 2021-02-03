@@ -28,4 +28,6 @@ interface IGameScreenViewModel {
 
     fun turnButtonTextData(): LiveData<String>
 
+    fun currentStatusTextData(): LiveData<String>
+
 }

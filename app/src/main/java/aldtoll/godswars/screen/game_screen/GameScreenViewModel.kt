@@ -10,6 +10,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
+import io.reactivex.functions.Function4
 import io.reactivex.functions.Function5
 import java.util.*
 
@@ -142,6 +143,49 @@ class GameScreenViewModel(
                         "Закончить размещение"
                     } else {
                         "Закончить ход"
+                    }
+                }
+            }
+        )
+        return LiveDataReactiveStreams.fromPublisher(
+            observable.toFlowable(BackpressureStrategy.LATEST)
+        )
+    }
+
+    override fun currentStatusTextData(): LiveData<String> {
+        val observable = Observable.combineLatest(
+            playerTurnInteractor.get(),
+            placedInteractor.get().startWith(false),
+            arrivedInteractor.get().startWith(false),
+            guestNameInteractor.get(),
+            Function4 { name: String, placed: Boolean, arrived: Boolean, guestName: String ->
+                if (guestName == playerName) {
+                    if (name == playerName) {
+                        if (arrived) {
+                            "Твой ход"
+                        } else {
+                            "Нужно выбрать причальный шлюз"
+                        }
+                    } else {
+                        if (!placed) {
+                            "Компуктер прячет свои недра..."
+                        } else {
+                            "ИИ измышляет здодейство..."
+                        }
+                    }
+                } else {
+                    if (name == playerName) {
+                        if (placed) {
+                            "Твой ход"
+                        } else {
+                            "Нужно расставить реактор, двигатель и мостик"
+                        }
+                    } else {
+                        if (!arrived) {
+                            "Пришелец выбирает место для проникновения..."
+                        } else {
+                            "Пришелец пакостит..."
+                        }
                     }
                 }
             }
