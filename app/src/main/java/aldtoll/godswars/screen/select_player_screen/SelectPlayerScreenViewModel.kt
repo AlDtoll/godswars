@@ -3,6 +3,7 @@ package aldtoll.godswars.screen.select_player_screen
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.storage.IGuestNameInteractor
+import aldtoll.godswars.domain.storage.IPlayerTurnInteractor
 import aldtoll.godswars.domain.storage.IWatchmanNameInteractor
 import aldtoll.godswars.routing.RouteToGameScreenInteractor
 import androidx.lifecycle.LiveData
@@ -16,7 +17,8 @@ class SelectPlayerScreenViewModel(
     private val databaseInteractor: IDatabaseInteractor,
     private val guestNameInteractor: IGuestNameInteractor,
     private val watchmanNameInteractor: IWatchmanNameInteractor,
-    private val routeToGameScreenInteractor: RouteToGameScreenInteractor
+    private val routeToGameScreenInteractor: RouteToGameScreenInteractor,
+    private val playerTurnInteractor: IPlayerTurnInteractor
 ) : ISelectPlayerScreenViewModel {
 
     private var guestName = PublishSubject.create<String>()
@@ -61,7 +63,7 @@ class SelectPlayerScreenViewModel(
 
     override fun startGame() {
         //todo нужно переделать, когда можно будет пропускать экран выбора игрока
-        if (watchmanNameInteractor.value().isEmpty()) {
+        if (playerTurnInteractor.value().isEmpty()) {
             databaseInteractor.giveTurnToWatchman()
         }
         routeToGameScreenInteractor.execute()
