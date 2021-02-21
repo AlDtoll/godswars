@@ -1,5 +1,6 @@
 package aldtoll.godswars.domain
 
+import aldtoll.godswars.App
 import aldtoll.godswars.domain.model.Cell
 import aldtoll.godswars.domain.model.Empty
 import aldtoll.godswars.domain.model.Room
@@ -239,6 +240,10 @@ class DatabaseInteractor(
     }
 
     override fun clearPlayerName() {
+        val pref = App.getPref()
+        pref?.run {
+            this.edit().remove("playerName").apply()
+        }
         val guestRef = database.getReference("guestName")
         guestRef.setValue("")
 
