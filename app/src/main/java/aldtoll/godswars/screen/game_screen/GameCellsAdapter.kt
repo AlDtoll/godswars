@@ -101,8 +101,10 @@ class GameCellsAdapter(
                         }
                         Cell.Type.TERMINAL -> {
                             if (removedCell is Terminal) {
+                                callback.decreaseCPU()
                                 Room()
                             } else {
+                                callback.increaseCPU()
                                 Terminal()
                             }
                         }
@@ -110,7 +112,7 @@ class GameCellsAdapter(
                     }
                     items.add(position, newCell)
                     notifyDataSetChanged()
-                    callback.saveItems()
+                    callback.saveCellsLocal()
                 }
             }
             backgroundItem.setBackgroundResource(item.getDrawable())
@@ -123,6 +125,10 @@ class GameCellsAdapter(
 
         fun clickCell(): Cell.Type
 
-        fun saveItems()
+        fun saveCellsLocal()
+
+        fun increaseCPU()
+
+        fun decreaseCPU()
     }
 }

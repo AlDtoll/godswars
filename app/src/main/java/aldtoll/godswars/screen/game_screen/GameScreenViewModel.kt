@@ -2,6 +2,7 @@ package aldtoll.godswars.screen.game_screen
 
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
+import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.Cell
 import aldtoll.godswars.domain.storage.*
 import androidx.lifecycle.LiveData
@@ -20,12 +21,14 @@ class GameScreenViewModel(
     private val guestNameInteractor: IGuestNameInteractor,
     private val playerTurnInteractor: IPlayerTurnInteractor,
     private val placedInteractor: IPlacedInteractor,
-    private val arrivedInteractor: IArrivedInteractor
+    private val arrivedInteractor: IArrivedInteractor,
+    private val actionPointsInteractor: IActionPointsInteractor,
+    private val watchmanInteractor: IWatchmanInteractor
 ) : IGameScreenViewModel {
 
     private val playerName = App.getPref()?.getString("playerName", "")
 
-    override fun saveCells(cells: ArrayList<Cell>) {
+    override fun saveCellsLocal(cells: ArrayList<Cell>) {
         cellsListInteractor.update(cells)
     }
 
@@ -55,7 +58,11 @@ class GameScreenViewModel(
 
     override fun isGuestData(): LiveData<Boolean> {
         return LiveDataReactiveStreams.fromPublisher(
-            guestNameInteractor.get().map { it == playerName }
+            guestNameInteractor.get().map {
+                val isGuest = it == playerName
+
+                isGuest
+            }
                 .toFlowable(BackpressureStrategy.LATEST)
         )
     }
@@ -139,6 +146,10 @@ class GameScreenViewModel(
                         "Закончить ход"
                     }
                 } else {
+                    val watchman = watchmanInteractor.value()
+                    watchman.cp = actionPointsInteractor.value().size.toLong()
+                    watchmanInteractor.update(watchman)
+                    databaseInteractor.saveWatchman()
                     if (!placed) {
                         "Закончить размещение"
                     } else {
@@ -194,4 +205,33 @@ class GameScreenViewModel(
             observable.toFlowable(BackpressureStrategy.LATEST)
         )
     }
+
+    override fun increaseMaxActionPoints(points: Int) {
+        val value = actionPointsInteractor.value()
+        for (i in 1..points) {
+            value.add(ActionPoint())
+        }
+        actionPointsInteractor.update(value)
+    }
+
+    @ExperimentalStdlibApi
+    override fun decreaseMaxActionPoint(points: Int) {
+        val value = actionPointsInteractor.value()
+        for (i in 1..points) {
+            if (value.isNotEmpty()) {
+                value.removeLast()
+            }
+        }
+        actionPointsInteractor.update(value)
+    }
+
+    override fun actionPointsData(): LiveData<MutableList<ActionPoint>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            actionPointsInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
+    }
+
+//    override fun updateActionPoint(mutableList: MutableList<ActionPoint>) {
+//        actionPointsInteractor.update(mutableList)
+//    }
 }

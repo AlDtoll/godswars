@@ -21,4 +21,6 @@ interface IDatabaseInteractor {
     fun placed()
 
     fun arrived()
+
+    fun saveWatchman()
 }

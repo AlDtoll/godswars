@@ -2,6 +2,7 @@ package aldtoll.godswars.screen.game_screen
 
 import aldtoll.godswars.R
 import aldtoll.godswars.domain.DatabaseInteractor
+import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.Cell
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +21,6 @@ class GameScreen : Fragment() {
             GameScreen()
     }
 
-    private var isGuest = false
     private var isPlaced = false
     private var isArrived = false
     private var type: Cell.Type = Cell.Type.ROOM
@@ -42,13 +42,13 @@ class GameScreen : Fragment() {
     private fun initUi() {
         gameScreenViewModel.cellsData().observe(viewLifecycleOwner, Observer {
             it?.run {
-                showData(it)
+                showCellsData(it)
             }
         })
 
         gameScreenViewModel.isGuestData().observe(viewLifecycleOwner, Observer {
             it?.run {
-                isGuest = it
+                initActionPoints(it)
             }
         })
 
@@ -88,13 +88,17 @@ class GameScreen : Fragment() {
             }
         })
 
+        gameScreenViewModel.actionPointsData().observe(viewLifecycleOwner, Observer {
+            showActionPointData(it)
+        })
+
         createCellsPanel()
 
         endTurnButton.setOnClickListener {
             gameScreenViewModel.endTurn()
         }
 
-        initRecyclerView()
+        initMap()
     }
 
     private fun createCellsPanel() {
@@ -129,14 +133,22 @@ class GameScreen : Fragment() {
             return type
         }
 
-        override fun saveItems() {
-            gameScreenViewModel.saveCells(gameCellsAdapter.items)
+        override fun saveCellsLocal() {
+            gameScreenViewModel.saveCellsLocal(gameCellsAdapter.items)
+        }
+
+        override fun increaseCPU() {
+            gameScreenViewModel.increaseMaxActionPoints(2)
+        }
+
+        override fun decreaseCPU() {
+            gameScreenViewModel.decreaseMaxActionPoint(2)
         }
 
     }
     private lateinit var gameCellsAdapter: GameCellsAdapter
 
-    private fun initRecyclerView() {
+    private fun initMap() {
         val numberOfCellsAndWalls =
             DatabaseInteractor.COLUMN_NUMBER + DatabaseInteractor.VERTICAL_WALL_NUMBER
         gameCellsAdapter = GameCellsAdapter(callback, numberOfCellsAndWalls)
@@ -158,7 +170,18 @@ class GameScreen : Fragment() {
         }
     }
 
-    private fun showData(cells: List<Cell>) {
+    private lateinit var actionPointsAdapter: ActionPointsAdapter
+
+    private fun initActionPoints(isGuest: Boolean) {
+        actionPointsAdapter = ActionPointsAdapter(isGuest)
+        actionPoints.adapter = actionPointsAdapter
+    }
+
+    private fun showCellsData(cells: List<Cell>) {
         gameCellsAdapter.items = ArrayList(cells)
+    }
+
+    private fun showActionPointData(actionPoints: List<ActionPoint>) {
+        actionPointsAdapter.items = ArrayList(actionPoints)
     }
 }

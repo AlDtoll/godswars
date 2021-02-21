@@ -2,9 +2,8 @@ package aldtoll.godswars.screen.select_player_screen
 
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
-import aldtoll.godswars.domain.storage.IGuestNameInteractor
-import aldtoll.godswars.domain.storage.IPlayerTurnInteractor
-import aldtoll.godswars.domain.storage.IWatchmanNameInteractor
+import aldtoll.godswars.domain.model.ActionPoint
+import aldtoll.godswars.domain.storage.*
 import aldtoll.godswars.routing.RouteToGameScreenInteractor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
@@ -18,7 +17,9 @@ class SelectPlayerScreenViewModel(
     private val guestNameInteractor: IGuestNameInteractor,
     private val watchmanNameInteractor: IWatchmanNameInteractor,
     private val routeToGameScreenInteractor: RouteToGameScreenInteractor,
-    private val playerTurnInteractor: IPlayerTurnInteractor
+    private val playerTurnInteractor: IPlayerTurnInteractor,
+    private val actionPointsInteractor: IActionPointsInteractor,
+    private val watchmanInteractor: IWatchmanInteractor
 ) : ISelectPlayerScreenViewModel {
 
     private var guestName = PublishSubject.create<String>()
@@ -65,6 +66,15 @@ class SelectPlayerScreenViewModel(
         //todo нужно переделать, когда можно будет пропускать экран выбора игрока
         if (playerTurnInteractor.value().isEmpty()) {
             databaseInteractor.giveTurnToWatchman()
+        }
+        val playerName = App.getPref()?.getString("playerName", "")
+        if (playerName != guestNameInteractor.value()) {
+            val watchman = watchmanInteractor.value()
+            val mutableList = mutableListOf<ActionPoint>()
+            for (i in 1..watchman.cp) {
+                mutableList.add(ActionPoint())
+            }
+            actionPointsInteractor.update(mutableList)
         }
         routeToGameScreenInteractor.execute()
     }

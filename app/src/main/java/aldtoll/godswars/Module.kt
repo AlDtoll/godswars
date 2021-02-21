@@ -27,9 +27,22 @@ val appModule = module {
 
     single { StartScreenViewModel(get(), get()) as IStartScreenViewModel }
     single { MapScreenEditorScreenViewModel(get(), get()) as IMapEditorScreenViewModel }
-    single { GameScreenViewModel(get(), get(), get(), get(), get(), get()) as IGameScreenViewModel }
+    single {
+        GameScreenViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IGameScreenViewModel
+    }
     single {
         SelectPlayerScreenViewModel(
+            get(),
+            get(),
             get(),
             get(),
             get(),
@@ -38,7 +51,18 @@ val appModule = module {
         ) as ISelectPlayerScreenViewModel
     }
 
-    single { DatabaseInteractor(get(), get(), get(), get(), get(), get()) as IDatabaseInteractor }
+    single {
+        DatabaseInteractor(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IDatabaseInteractor
+    }
 
     single { CellsListInteractor() as ICellsListInteractor }
     single { GuestNameInteractor() as IGuestNameInteractor }
@@ -46,6 +70,10 @@ val appModule = module {
     single { PlayerTurnInteractor() as IPlayerTurnInteractor }
     single { PlacedInteractor() as IPlacedInteractor }
     single { ArrivedInteractor() as IArrivedInteractor }
+    single { ActionPointsInteractor() as IActionPointsInteractor }
+    single { GuestListInteractor() as IGuestListInteractor }
+    single { SelectedGuestInteractor() as ISelectedGuestInteractor }
+    single { WatchmanInteractor() as IWatchmanInteractor }
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }

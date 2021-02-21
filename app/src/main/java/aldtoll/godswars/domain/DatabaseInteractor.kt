@@ -3,6 +3,8 @@ package aldtoll.godswars.domain
 import aldtoll.godswars.domain.model.Cell
 import aldtoll.godswars.domain.model.Empty
 import aldtoll.godswars.domain.model.Room
+import aldtoll.godswars.domain.model.Watchman
+import aldtoll.godswars.domain.model.unit.Guest
 import aldtoll.godswars.domain.storage.*
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
@@ -17,7 +19,9 @@ class DatabaseInteractor(
     private val watchmanNameInteractor: IWatchmanNameInteractor,
     private val playerTurnInteractor: IPlayerTurnInteractor,
     private val placedInteractor: IPlacedInteractor,
-    private val arrivedInteractor: IArrivedInteractor
+    private val arrivedInteractor: IArrivedInteractor,
+    private val guestListInteractor: IGuestListInteractor,
+    private val watchmanInteractor: IWatchmanInteractor
 ) : IDatabaseInteractor {
 
     companion object {
@@ -171,6 +175,53 @@ class DatabaseInteractor(
                 Log.w("TAG", "Failed to read value.", error.toException())
             }
         })
+
+        database.getReference("guests").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val value = dataSnapshot.value
+                value?.run {
+                    if (value is ArrayList<*>) {
+                        val arrayList = value as ArrayList<Guest>
+                        val guests = mutableListOf<Guest>()
+//                        arrayList.forEach {
+//                            guests.add(Cell.fromMap(it))
+//                        }
+                        guestListInteractor.update(arrayList)
+                    }
+                }
+                if (value == null) {
+                    clearGuests()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException())
+            }
+        })
+
+        database.getReference("watchman").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val value = dataSnapshot.value
+                value?.run {
+                    val hashMap = value as HashMap<String, Any>
+                    val watchman = Watchman.fromMap(hashMap)
+                    watchmanInteractor.update(watchman)
+                }
+                if (value == null) {
+                    clearWatchman()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException())
+            }
+        })
     }
 
     override fun saveGuestName() {
@@ -202,6 +253,9 @@ class DatabaseInteractor(
 
         val arrivedRef = database.getReference("arrived")
         arrivedRef.setValue(false)
+
+        clearGuests()
+        clearWatchman()
     }
 
     override fun giveTurnToWatchman() {
@@ -222,5 +276,25 @@ class DatabaseInteractor(
     override fun arrived() {
         val ref = database.getReference("arrived")
         ref.setValue(true)
+    }
+
+    override fun saveWatchman() {
+        val myRef = database.getReference("watchman")
+        myRef.setValue(watchmanInteractor.value())
+    }
+
+    private fun clearGuests() {
+        val myRef = database.getReference("guests")
+        val list = mutableListOf(
+            Guest()
+        )
+        myRef.setValue(list)
+    }
+
+    private fun clearWatchman() {
+        val myRef = database.getReference("watchman")
+        val watchman = Watchman()
+        myRef.setValue(watchman)
+        watchmanInteractor.update(watchman)
     }
 }
