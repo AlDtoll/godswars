@@ -1,7 +1,8 @@
 package aldtoll.godswars.screen.game_screen
 
 import aldtoll.godswars.R
-import aldtoll.godswars.domain.model.*
+import aldtoll.godswars.domain.model.cells.*
+import aldtoll.godswars.domain.model.unit.Person
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,24 @@ class GameCellsAdapter(
     }
 
     var items = ArrayList<Cell>()
+        set(data) {
+            field = data
+            notifyDataSetChanged()
+        }
+
+    var placed = false
+        set(data) {
+            field = data
+            notifyDataSetChanged()
+        }
+
+    var arrived = false
+        set(data) {
+            field = data
+            notifyDataSetChanged()
+        }
+
+    var guest = false
         set(data) {
             field = data
             notifyDataSetChanged()
@@ -73,49 +92,71 @@ class GameCellsAdapter(
         getItemViewType(holder.itemViewType)
         holder.itemView.run {
             this.setOnClickListener {
-                val type = callback.clickCell()
-                val canPlaceElement = holder.itemViewType == ROOM && items[position] !is Pier
-                if (canPlaceElement) {
-                    val removedCell = items.removeAt(position)
-                    val newCell = when (type) {
-                        Cell.Type.REACTOR -> {
-                            if (removedCell is Reactor) {
-                                Room()
-                            } else {
-                                Reactor()
-                            }
+                if (guest) {
+                    if (items[position] is Pier) {
+                        val piers = items.filter { it.getType() == Cell.Type.PIER }
+                        piers.forEach {
+                            (it as Pier).persons = arrayListOf()
                         }
-                        Cell.Type.ENGINE -> {
-                            if (removedCell is Engine) {
-                                Room()
-                            } else {
-                                Engine()
-                            }
-                        }
-                        Cell.Type.BRIDGE -> {
-                            if (removedCell is Bridge) {
-                                Room()
-                            } else {
-                                Bridge()
-                            }
-                        }
-                        Cell.Type.TERMINAL -> {
-                            if (removedCell is Terminal) {
-                                callback.decreaseCPU()
-                                Room()
-                            } else {
-                                callback.increaseCPU()
-                                Terminal()
-                            }
-                        }
-                        else -> removedCell
+                        (item as Pier).persons = callback.getSelectedGuests()
                     }
-                    items.add(position, newCell)
-                    notifyDataSetChanged()
-                    callback.saveCellsLocal()
+                } else {
+                    val type = callback.clickCell()
+                    val canPlaceElement = holder.itemViewType == ROOM && items[position] !is Pier
+                    if (canPlaceElement) {
+                        val removedCell = items.removeAt(position)
+                        val newCell = when (type) {
+                            Cell.Type.REACTOR -> {
+                                if (removedCell is Reactor) {
+                                    Room()
+                                } else {
+                                    Reactor()
+                                }
+                            }
+                            Cell.Type.ENGINE -> {
+                                if (removedCell is Engine) {
+                                    Room()
+                                } else {
+                                    Engine()
+                                }
+                            }
+                            Cell.Type.BRIDGE -> {
+                                if (removedCell is Bridge) {
+                                    Room()
+                                } else {
+                                    Bridge()
+                                }
+                            }
+                            Cell.Type.TERMINAL -> {
+                                if (removedCell is Terminal) {
+                                    callback.decreaseCPU()
+                                    Room()
+                                } else {
+                                    callback.increaseCPU()
+                                    Terminal()
+                                }
+                            }
+                            else -> removedCell
+                        }
+                        items.add(position, newCell)
+                    }
                 }
+                notifyDataSetChanged()
+                callback.saveCellsLocal()
             }
-            backgroundItem.setBackgroundResource(item.getDrawable())
+            if (guest) {
+                if (arrived) {
+                    backgroundItem.setBackgroundResource(item.getDrawable())
+                } else {
+                    if (item is Pier) {
+                        backgroundItem.setBackgroundResource(item.getDrawable())
+                    } else {
+                        backgroundItem.setBackgroundResource(R.drawable.ic_shadow)
+                    }
+                }
+            } else {
+                backgroundItem.setBackgroundResource(item.getDrawable())
+            }
         }
     }
 
@@ -130,5 +171,7 @@ class GameCellsAdapter(
         fun increaseCPU()
 
         fun decreaseCPU()
+
+        fun getSelectedGuests(): java.util.ArrayList<Person>
     }
 }

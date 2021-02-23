@@ -14,5 +14,5 @@ class SelectedGuestInteractor : ISelectedGuestInteractor {
 
     override fun get(): Observable<Guest> = item
 
-    override fun value(): Guest = item.value ?: Guest(100, 5)
+    override fun value(): Guest = item.value ?: Guest()
 }

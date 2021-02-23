@@ -1,4 +1,6 @@
-package aldtoll.godswars.domain.model
+package aldtoll.godswars.domain.model.cells
+
+import aldtoll.godswars.domain.model.unit.Person
 
 interface Cell {
 
@@ -11,7 +13,17 @@ interface Cell {
                     map["open"] as Boolean
                 )
                 map.containsKey("empty") -> Empty(map["empty"] as Boolean)
-                map.containsKey("pier") -> Pier(map["pier"] as Boolean)
+                map.containsKey("pier") -> {
+                    val personsMap = map["persons"]
+                    var persons = listOf<Person>()
+                    if (personsMap != null) {
+                        persons = personsMap as List<Person>
+                    }
+                    Pier(
+                        map["pier"] as Boolean,
+                        persons
+                    )
+                }
                 map.containsKey("engine") -> Engine(map["engine"] as Boolean)
                 map.containsKey("reactor") -> Reactor(map["reactor"] as Boolean)
                 map.containsKey("bridge") -> Bridge(map["bridge"] as Boolean)

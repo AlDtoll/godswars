@@ -1,7 +1,8 @@
 package aldtoll.godswars.screen.game_screen
 
 import aldtoll.godswars.domain.model.ActionPoint
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.unit.Guest
 import androidx.lifecycle.LiveData
 import java.util.*
 
@@ -36,5 +37,7 @@ interface IGameScreenViewModel {
     fun increaseMaxActionPoints(points: Int)
 
     fun decreaseMaxActionPoint(points: Int)
+
+    fun personsData(): LiveData<MutableList<Guest>>
 
 }

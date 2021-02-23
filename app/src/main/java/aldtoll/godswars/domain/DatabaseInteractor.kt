@@ -1,10 +1,10 @@
 package aldtoll.godswars.domain
 
 import aldtoll.godswars.App
-import aldtoll.godswars.domain.model.Cell
-import aldtoll.godswars.domain.model.Empty
-import aldtoll.godswars.domain.model.Room
 import aldtoll.godswars.domain.model.Watchman
+import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.cells.Empty
+import aldtoll.godswars.domain.model.cells.Room
 import aldtoll.godswars.domain.model.unit.Guest
 import aldtoll.godswars.domain.storage.*
 import android.util.Log
@@ -184,12 +184,12 @@ class DatabaseInteractor(
                 val value = dataSnapshot.value
                 value?.run {
                     if (value is ArrayList<*>) {
-                        val arrayList = value as ArrayList<Guest>
+                        val arrayList = value as ArrayList<HashMap<String, Any>>
                         val guests = mutableListOf<Guest>()
-//                        arrayList.forEach {
-//                            guests.add(Cell.fromMap(it))
-//                        }
-                        guestListInteractor.update(arrayList)
+                        arrayList.forEach {
+                            guests.add(Guest.fromMap(it))
+                        }
+                        guestListInteractor.update(guests)
                     }
                 }
                 if (value == null) {
@@ -294,6 +294,7 @@ class DatabaseInteractor(
             Guest()
         )
         myRef.setValue(list)
+        guestListInteractor.update(list)
     }
 
     private fun clearWatchman() {

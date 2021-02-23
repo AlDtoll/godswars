@@ -1,6 +1,6 @@
 package aldtoll.godswars.screen.map_screen
 
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
 import androidx.lifecycle.LiveData
 import java.util.*
 

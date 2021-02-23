@@ -1,7 +1,7 @@
 package aldtoll.godswars.screen.map_screen
 
 import aldtoll.godswars.domain.IDatabaseInteractor
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
 import aldtoll.godswars.domain.storage.ICellsListInteractor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams

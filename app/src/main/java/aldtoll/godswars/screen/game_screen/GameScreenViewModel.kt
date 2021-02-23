@@ -3,7 +3,9 @@ package aldtoll.godswars.screen.game_screen
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.model.ActionPoint
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.cells.Pier
+import aldtoll.godswars.domain.model.unit.Guest
 import aldtoll.godswars.domain.storage.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
@@ -23,7 +25,8 @@ class GameScreenViewModel(
     private val placedInteractor: IPlacedInteractor,
     private val arrivedInteractor: IArrivedInteractor,
     private val actionPointsInteractor: IActionPointsInteractor,
-    private val watchmanInteractor: IWatchmanInteractor
+    private val watchmanInteractor: IWatchmanInteractor,
+    private val guestListInteractor: IGuestListInteractor
 ) : IGameScreenViewModel {
 
     private val playerName = App.getPref()?.getString("playerName", "")
@@ -79,7 +82,13 @@ class GameScreenViewModel(
                     return@Function5 false
                 } else {
                     if (guestName == playerName) {
-                        true
+                        if (!arrived) {
+                            val filter = cells.filter { it.getType() == Cell.Type.PIER }
+                            val find = filter.find { (it as Pier).persons?.isNotEmpty() ?: false }
+                            find != null
+                        } else {
+                            true
+                        }
                     } else {
                         if (!placed) {
                             cells.filter { it.getType() == Cell.Type.ENGINE }.size == 1 &&
@@ -231,7 +240,9 @@ class GameScreenViewModel(
         )
     }
 
-//    override fun updateActionPoint(mutableList: MutableList<ActionPoint>) {
-//        actionPointsInteractor.update(mutableList)
-//    }
+    override fun personsData(): LiveData<MutableList<Guest>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            guestListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
+    }
 }

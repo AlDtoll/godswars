@@ -1,7 +1,7 @@
 package aldtoll.godswars.screen.map_screen
 
 import aldtoll.godswars.R
-import aldtoll.godswars.domain.model.*
+import aldtoll.godswars.domain.model.cells.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,7 +82,9 @@ class MapEditorCellsAdapter(
                     val newCell = when (type) {
                         Cell.Type.ROOM -> Room()
                         Cell.Type.WALL -> Wall()
-                        Cell.Type.DOOR -> Door(holder.itemViewType == HORIZONTAL_WALL)
+                        Cell.Type.DOOR -> Door(
+                            holder.itemViewType == HORIZONTAL_WALL
+                        )
                         Cell.Type.EMPTY -> Empty()
                         Cell.Type.PIER -> Pier()
                         else -> Empty()

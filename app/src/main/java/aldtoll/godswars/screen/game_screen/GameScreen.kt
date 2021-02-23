@@ -3,7 +3,8 @@ package aldtoll.godswars.screen.game_screen
 import aldtoll.godswars.R
 import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.model.ActionPoint
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.unit.Person
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +22,6 @@ class GameScreen : Fragment() {
             GameScreen()
     }
 
-    private var isPlaced = false
-    private var isArrived = false
     private var type: Cell.Type = Cell.Type.ROOM
     private val gameScreenViewModel: IGameScreenViewModel by inject()
 
@@ -49,6 +48,7 @@ class GameScreen : Fragment() {
         gameScreenViewModel.isGuestData().observe(viewLifecycleOwner, Observer {
             it?.run {
                 initActionPoints(it)
+                gameCellsAdapter?.guest = it
             }
         })
 
@@ -78,18 +78,22 @@ class GameScreen : Fragment() {
 
         gameScreenViewModel.isPlacedData().observe(viewLifecycleOwner, Observer {
             it?.run {
-                isPlaced = it
+                gameCellsAdapter?.placed = it
             }
         })
 
         gameScreenViewModel.isArrivedData().observe(viewLifecycleOwner, Observer {
             it?.run {
-                isArrived = it
+                gameCellsAdapter?.arrived = it
             }
         })
 
         gameScreenViewModel.actionPointsData().observe(viewLifecycleOwner, Observer {
             showActionPointData(it)
+        })
+
+        gameScreenViewModel.personsData().observe(viewLifecycleOwner, Observer {
+            showPersons(it)
         })
 
         createCellsPanel()
@@ -99,6 +103,7 @@ class GameScreen : Fragment() {
         }
 
         initMap()
+        initPersons()
     }
 
     private fun createCellsPanel() {
@@ -134,7 +139,9 @@ class GameScreen : Fragment() {
         }
 
         override fun saveCellsLocal() {
-            gameScreenViewModel.saveCellsLocal(gameCellsAdapter.items)
+            gameCellsAdapter?.run {
+                gameScreenViewModel.saveCellsLocal(this.items)
+            }
         }
 
         override fun increaseCPU() {
@@ -145,8 +152,11 @@ class GameScreen : Fragment() {
             gameScreenViewModel.decreaseMaxActionPoint(2)
         }
 
+        override fun getSelectedGuests(): ArrayList<Person> {
+            return personsAdapter.items
+        }
     }
-    private lateinit var gameCellsAdapter: GameCellsAdapter
+    private var gameCellsAdapter: GameCellsAdapter? = null
 
     private fun initMap() {
         val numberOfCellsAndWalls =
@@ -178,10 +188,21 @@ class GameScreen : Fragment() {
     }
 
     private fun showCellsData(cells: List<Cell>) {
-        gameCellsAdapter.items = ArrayList(cells)
+        gameCellsAdapter?.items = ArrayList(cells)
     }
 
     private fun showActionPointData(actionPoints: List<ActionPoint>) {
         actionPointsAdapter.items = ArrayList(actionPoints)
+    }
+
+    private lateinit var personsAdapter: PersonsAdapter
+
+    private fun initPersons() {
+        personsAdapter = PersonsAdapter()
+        personsList.adapter = personsAdapter
+    }
+
+    private fun showPersons(persons: List<Person>) {
+        personsAdapter.items = ArrayList(persons)
     }
 }

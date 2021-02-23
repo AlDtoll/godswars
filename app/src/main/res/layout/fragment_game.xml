@@ -9,7 +9,7 @@
         android:id="@+id/cellsPanel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginTop="@dimen/padding_small_8"
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,13 +51,27 @@
 
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/personsList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/padding_small_8"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cellsPanel"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_person_card" />
+
     <TextView
         android:id="@+id/gameScreenPlayerTurnStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small_8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cellsPanel"
+        app:layout_constraintTop_toBottomOf="@id/personsList"
         tools:text="Твой ход" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -65,7 +79,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small_8"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,8 +92,8 @@
         android:id="@+id/cells"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/padding_small"
-        android:layout_marginBottom="@dimen/padding_small"
+        android:layout_marginTop="@dimen/padding_small_8"
+        android:layout_marginBottom="@dimen/padding_small_8"
         android:clipToPadding="true"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"

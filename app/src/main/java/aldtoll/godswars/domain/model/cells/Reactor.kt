@@ -1,4 +1,4 @@
-package aldtoll.godswars.domain.model
+package aldtoll.godswars.domain.model.cells
 
 import aldtoll.godswars.R
 import com.google.firebase.database.IgnoreExtraProperties
@@ -12,5 +12,6 @@ data class Reactor(
         return R.drawable.ic_reactor
     }
 
-    override fun getType(): Cell.Type = Cell.Type.REACTOR
+    override fun getType(): Cell.Type =
+        Cell.Type.REACTOR
 }

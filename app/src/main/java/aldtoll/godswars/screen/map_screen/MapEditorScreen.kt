@@ -2,7 +2,7 @@ package aldtoll.godswars.screen.map_screen
 
 import aldtoll.godswars.R
 import aldtoll.godswars.domain.DatabaseInteractor
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

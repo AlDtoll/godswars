@@ -1,4 +1,4 @@
-package aldtoll.godswars.domain.model
+package aldtoll.godswars.domain.model.cells
 
 import aldtoll.godswars.R
 import com.google.firebase.database.IgnoreExtraProperties
@@ -13,6 +13,7 @@ data class Wall(
         return R.drawable.ic_wall
     }
 
-    override fun getType(): Cell.Type = Cell.Type.WALL
+    override fun getType(): Cell.Type =
+        Cell.Type.WALL
 
 }

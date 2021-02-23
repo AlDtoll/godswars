@@ -1,6 +1,6 @@
 package aldtoll.godswars.domain.storage
 
-import aldtoll.godswars.domain.model.Cell
+import aldtoll.godswars.domain.model.cells.Cell
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
