@@ -3,8 +3,6 @@ package aldtoll.godswars.domain
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.model.Watchman
 import aldtoll.godswars.domain.model.cells.Cell
-import aldtoll.godswars.domain.model.cells.Empty
-import aldtoll.godswars.domain.model.cells.Room
 import aldtoll.godswars.domain.model.unit.Guest
 import aldtoll.godswars.domain.storage.*
 import android.util.Log
@@ -27,9 +25,7 @@ class DatabaseInteractor(
 
     companion object {
         const val COLUMN_NUMBER = 6
-        const val VERTICAL_WALL_NUMBER = COLUMN_NUMBER - 1
         const val ROW_NUMBER = 7
-        const val HORIZONTAL_WALL_NUMBER = ROW_NUMBER - 1
     }
 
     val database = Firebase.database
@@ -37,20 +33,25 @@ class DatabaseInteractor(
     override fun clearCells() {
         val myRef = database.getReference("cells")
         val list =
-            MutableList((COLUMN_NUMBER + VERTICAL_WALL_NUMBER) * (ROW_NUMBER + HORIZONTAL_WALL_NUMBER)) { index ->
-                val rowNumber = index / (COLUMN_NUMBER + VERTICAL_WALL_NUMBER)
-                val columnNumber = index % (COLUMN_NUMBER + VERTICAL_WALL_NUMBER)
-                if (rowNumber % 2 == 1 && columnNumber % 2 == 1) {
-                    Empty()
-                } else if (columnNumber % 2 == 1) {
-                    Empty()
-                } else if (rowNumber % 2 == 1) {
-                    Empty()
-                } else {
-                    Room()
-                }
+            MutableList((COLUMN_NUMBER) * (ROW_NUMBER)) { index ->
+                val rowNumber = index / (COLUMN_NUMBER)
+                val columnNumber = index % (COLUMN_NUMBER)
+//                if (index == COLUMN_NUMBER) {
+//                    Cell(Room(), Wall(Wall.Type.NO))
+//                }
+//                if (rowNumber % 2 == 1 && columnNumber % 2 == 1) {
+//                    Empty()
+//                } else if (columnNumber % 2 == 1) {
+//                    Empty()
+//                } else if (rowNumber % 2 == 1) {
+//                    Empty()
+//                } else {
+//                    Room()
+//                }
+                Cell()
             }
         myRef.setValue(list)
+        cellsListInteractor.update(list)
     }
 
     override fun saveMap() {

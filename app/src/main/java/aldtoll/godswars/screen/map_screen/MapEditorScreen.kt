@@ -3,6 +3,8 @@ package aldtoll.godswars.screen.map_screen
 import aldtoll.godswars.R
 import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.cells.Room
+import aldtoll.godswars.domain.model.cells.Wall
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +19,8 @@ import org.koin.android.ext.android.inject
 class MapEditorScreen : Fragment() {
 
     private val mapEditorScreenViewModel: IMapEditorScreenViewModel by inject()
-    private var type: Cell.Type = Cell.Type.ROOM
+    private var roomType: Room.Type = Room.Type.ROOM
+    private var wallType: Wall.Type = Wall.Type.EMPTY
 
     companion object {
         fun newInstance(): MapEditorScreen =
@@ -45,27 +48,32 @@ class MapEditorScreen : Fragment() {
         })
 
         roomCell.setOnClickListener {
-            type = Cell.Type.ROOM
+            roomType = Room.Type.ROOM
         }
         doorCell.setOnClickListener {
-            type = Cell.Type.DOOR
+            wallType = Wall.Type.DOOR
         }
         emptyCell.setOnClickListener {
-            type = Cell.Type.EMPTY
+            wallType = Wall.Type.EMPTY
+            roomType = Room.Type.EMPTY
         }
         wallCell.setOnClickListener {
-            type = Cell.Type.WALL
+            wallType = Wall.Type.WALL
         }
         pierCell.setOnClickListener {
-            type = Cell.Type.PIER
+            roomType = Room.Type.PIER
         }
 
         initRecyclerView()
     }
 
     private val callback = object : MapEditorCellsAdapter.Callback {
-        override fun clickCell(): Cell.Type {
-            return type
+        override fun clickRoom(): Room.Type {
+            return roomType
+        }
+
+        override fun clickWall(): Wall.Type {
+            return wallType
         }
 
         override fun saveItems() {
@@ -77,23 +85,11 @@ class MapEditorScreen : Fragment() {
 
 
     private fun initRecyclerView() {
-        val numberOfCellsAndWalls =
-            DatabaseInteractor.COLUMN_NUMBER + DatabaseInteractor.VERTICAL_WALL_NUMBER
-        mapEditorCellsAdapter = MapEditorCellsAdapter(callback, numberOfCellsAndWalls)
+        mapEditorCellsAdapter = MapEditorCellsAdapter(callback)
         cells.adapter = mapEditorCellsAdapter
-        val value = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val columnNumber = position % numberOfCellsAndWalls
-                return when (columnNumber % 2) {
-                    1 -> 1
-                    else -> 2
-                }
-            }
-        }
         context?.run {
             val gridLayoutManager =
-                GridLayoutManager(this, numberOfCellsAndWalls + DatabaseInteractor.COLUMN_NUMBER)
-            gridLayoutManager.spanSizeLookup = value
+                GridLayoutManager(this, DatabaseInteractor.COLUMN_NUMBER)
             cells.layoutManager = gridLayoutManager
         }
     }

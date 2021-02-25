@@ -159,23 +159,11 @@ class GameScreen : Fragment() {
     private var gameCellsAdapter: GameCellsAdapter? = null
 
     private fun initMap() {
-        val numberOfCellsAndWalls =
-            DatabaseInteractor.COLUMN_NUMBER + DatabaseInteractor.VERTICAL_WALL_NUMBER
-        gameCellsAdapter = GameCellsAdapter(callback, numberOfCellsAndWalls)
+        gameCellsAdapter = GameCellsAdapter(callback)
         cells.adapter = gameCellsAdapter
-        val value = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val columnNumber = position % numberOfCellsAndWalls
-                return when (columnNumber % 2) {
-                    1 -> 1
-                    else -> 2
-                }
-            }
-        }
         context?.run {
             val gridLayoutManager =
-                GridLayoutManager(this, numberOfCellsAndWalls + DatabaseInteractor.COLUMN_NUMBER)
-            gridLayoutManager.spanSizeLookup = value
+                GridLayoutManager(this, DatabaseInteractor.COLUMN_NUMBER)
             cells.layoutManager = gridLayoutManager
         }
     }

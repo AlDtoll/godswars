@@ -9,15 +9,41 @@
     app:cardUseCompatPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="@dimen/room_size"
-        android:layout_height="@dimen/room_size">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/backgroundItem"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/room"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
             android:padding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_knight" />
+
+        <ImageView
+            android:id="@+id/rightWall"
+            android:layout_width="@dimen/wall_size"
+            android:layout_height="@dimen/room_size"
+            android:background="@drawable/ic_empty_cell"
+            app:layout_constraintStart_toEndOf="@id/room"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/bottomWall"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/wall_size"
+            android:background="@drawable/ic_empty_cell"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/room" />
+
+        <ImageView
+            android:id="@+id/cross"
+            android:layout_width="@dimen/wall_size"
+            android:layout_height="@dimen/wall_size"
+            android:background="@drawable/ic_empty_cell"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

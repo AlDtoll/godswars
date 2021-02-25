@@ -1,41 +1,45 @@
 package aldtoll.godswars.domain.model.cells
 
-import aldtoll.godswars.domain.model.unit.Person
+import com.google.firebase.database.IgnoreExtraProperties
 
-interface Cell {
+@IgnoreExtraProperties
+data class Cell(
+    val room: Room = Room(),
+    val rightWall: Wall = Wall(),
+    val bottomWall: Wall = Wall(true),
+    val cross: Wall = Wall()
+) {
 
     companion object {
         fun fromMap(map: HashMap<String, Any>): Cell {
-            return when {
-                map.containsKey("knight") -> Room(map["knight"] as Boolean)
-                map.containsKey("open") -> Door(
-                    map["horizontal"] as Boolean,
-                    map["open"] as Boolean
-                )
-                map.containsKey("empty") -> Empty(map["empty"] as Boolean)
-                map.containsKey("pier") -> {
-                    val personsMap = map["persons"]
-                    var persons = listOf<Person>()
-                    if (personsMap != null) {
-                        persons = personsMap as List<Person>
-                    }
-                    Pier(
-                        map["pier"] as Boolean,
-                        persons
-                    )
-                }
-                map.containsKey("engine") -> Engine(map["engine"] as Boolean)
-                map.containsKey("reactor") -> Reactor(map["reactor"] as Boolean)
-                map.containsKey("bridge") -> Bridge(map["bridge"] as Boolean)
-                map.containsKey("terminal") -> Terminal(map["terminal"] as Boolean)
-                else -> Wall(map["exist"] as Boolean)
+            val roomMap = map["room"]
+            var room = Room()
+            if (roomMap != null) {
+                room = Room.fromMap(roomMap as HashMap<String, Any>)
             }
+            val rightWallMap = map["rightWall"]
+            var rightWall = Wall()
+            if (rightWallMap != null) {
+                rightWall = Wall.fromMap(rightWallMap as HashMap<String, Any>)
+            }
+            val bottomWallMap = map["bottomWall"]
+            var bottomWall = Wall(true)
+            if (roomMap != null) {
+                bottomWall = Wall.fromMap(bottomWallMap as HashMap<String, Any>)
+            }
+            val crossMap = map["cross"]
+            var cross = Wall()
+            if (crossMap != null) {
+                cross = Wall.fromMap(crossMap as HashMap<String, Any>)
+            }
+            return Cell(
+                room,
+                rightWall,
+                bottomWall,
+                cross
+            )
         }
     }
-
-    fun getDrawable(): Int
-
-    fun getType(): Type
 
     enum class Type {
         ROOM,
