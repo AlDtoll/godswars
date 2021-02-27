@@ -32,7 +32,13 @@ data class Room(
         return when (type) {
             Type.ROOM -> R.drawable.ic_room
             Type.EMPTY -> R.drawable.ic_empty_cell
-            Type.PIER -> R.drawable.ic_pier_cell
+            Type.PIER -> {
+                if (persons.isNullOrEmpty()) {
+                    R.drawable.ic_pier_cell
+                } else {
+                    R.drawable.ic_pier_with_alien
+                }
+            }
             Type.ENGINE -> R.drawable.ic_engine
             Type.REACTOR -> R.drawable.ic_reactor
             Type.BRIDGE -> R.drawable.ic_servers

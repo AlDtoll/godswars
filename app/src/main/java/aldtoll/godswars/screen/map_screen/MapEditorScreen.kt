@@ -4,6 +4,7 @@ import aldtoll.godswars.R
 import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.model.cells.Cell
 import aldtoll.godswars.domain.model.cells.Room
+import aldtoll.godswars.domain.model.cells.Sheep
 import aldtoll.godswars.domain.model.cells.Wall
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -77,7 +78,7 @@ class MapEditorScreen : Fragment() {
         }
 
         override fun saveItems() {
-            mapEditorScreenViewModel.saveCells(mapEditorCellsAdapter.items)
+            mapEditorScreenViewModel.saveCells(mapEditorCellsAdapter.sheep.cells)
         }
 
     }
@@ -95,7 +96,9 @@ class MapEditorScreen : Fragment() {
     }
 
     private fun showData(cells: List<Cell>) {
-        mapEditorCellsAdapter.items = ArrayList(cells)
+        val sheep = Sheep()
+        sheep.cells = ArrayList(cells)
+        mapEditorCellsAdapter.sheep = sheep
     }
 
 }

@@ -6,14 +6,18 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class Wall(
     val horizontal: Boolean = false,
-    var type: Type = Type.EMPTY
+    var type: Type = Type.EMPTY,
+    var visited: Boolean = false,
+    var show: Boolean = false
 ) {
 
     companion object {
         fun fromMap(map: HashMap<String, Any>): Wall {
             return Wall(
                 map["horizontal"] as Boolean,
-                Type.valueOf(map["type"] as String)
+                Type.valueOf(map["type"] as String),
+                map["visited"] as Boolean,
+                map["show"] as Boolean
             )
         }
     }

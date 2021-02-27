@@ -4,6 +4,8 @@ import aldtoll.godswars.R
 import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.cells.Room
+import aldtoll.godswars.domain.model.cells.Sheep
 import aldtoll.godswars.domain.model.unit.Person
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +24,7 @@ class GameScreen : Fragment() {
             GameScreen()
     }
 
-    private var type: Cell.Type = Cell.Type.ROOM
+    private var roomType: Room.Type = Room.Type.ROOM
     private val gameScreenViewModel: IGameScreenViewModel by inject()
 
     override fun onCreateView(
@@ -109,19 +111,19 @@ class GameScreen : Fragment() {
     private fun createCellsPanel() {
         reactorCell.setOnClickListener {
             colorCell(it)
-            type = Cell.Type.REACTOR
+            roomType = Room.Type.REACTOR
         }
         engineCell.setOnClickListener {
             colorCell(it)
-            type = Cell.Type.ENGINE
+            roomType = Room.Type.ENGINE
         }
         bridgeCell.setOnClickListener {
             colorCell(it)
-            type = Cell.Type.BRIDGE
+            roomType = Room.Type.BRIDGE
         }
         terminalCell.setOnClickListener {
             colorCell(it)
-            type = Cell.Type.TERMINAL
+            roomType = Room.Type.TERMINAL
         }
     }
 
@@ -134,13 +136,13 @@ class GameScreen : Fragment() {
     }
 
     private val callback = object : GameCellsAdapter.Callback {
-        override fun clickCell(): Cell.Type {
-            return type
+        override fun clickRoom(): Room.Type {
+            return roomType
         }
 
         override fun saveCellsLocal() {
             gameCellsAdapter?.run {
-                gameScreenViewModel.saveCellsLocal(this.items)
+                gameScreenViewModel.saveCellsLocal(this.sheep.cells)
             }
         }
 
@@ -176,7 +178,9 @@ class GameScreen : Fragment() {
     }
 
     private fun showCellsData(cells: List<Cell>) {
-        gameCellsAdapter?.items = ArrayList(cells)
+        val sheep = Sheep()
+        sheep.cells = ArrayList(cells)
+        gameCellsAdapter?.sheep = sheep
     }
 
     private fun showActionPointData(actionPoints: List<ActionPoint>) {

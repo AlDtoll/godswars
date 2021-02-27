@@ -1,18 +1,21 @@
 package aldtoll.godswars.screen.game_screen
 
 import aldtoll.godswars.R
-import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.cells.Room
+import aldtoll.godswars.domain.model.cells.Sheep
+import aldtoll.godswars.domain.model.cells.Wall
 import aldtoll.godswars.domain.model.unit.Person
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.item_cell.view.*
 
 class GameCellsAdapter(
     private val callback: Callback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = ArrayList<Cell>()
+    var sheep = Sheep()
         set(data) {
             field = data
             notifyDataSetChanged()
@@ -43,90 +46,85 @@ class GameCellsAdapter(
         )
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = sheep.cells.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = items[position]
+        val item = sheep.cells[position]
         holder.itemView.run {
-            //            this.setOnClickListener {
-//                if (guest) {
-//                    if (!arrived && items[position] is Pier) {
-//                        val piers = items.filter { it.getType() == Cell.Type.PIER }
-//                        piers.forEach {
-//                            (it as Pier).persons = arrayListOf()
-//                        }
-//                        (item as Pier).persons = callback.getSelectedGuests()
-//                    }
-//                    if (arrived) {
-//
-//                    }
-//                } else {
-//                    val type = callback.clickCell()
-//                    val canPlaceElement = holder.itemViewType == ROOM && items[position] !is Pier
-//                    if (canPlaceElement) {
-//                        val removedCell = items.removeAt(position)
-//                        val newCell = when (type) {
-//                            Cell.Type.REACTOR -> {
-//                                if (removedCell is Reactor) {
-//                                    Room()
-//                                } else {
-//                                    Reactor()
-//                                }
-//                            }
-//                            Cell.Type.ENGINE -> {
-//                                if (removedCell is Engine) {
-//                                    Room()
-//                                } else {
-//                                    Engine()
-//                                }
-//                            }
-//                            Cell.Type.BRIDGE -> {
-//                                if (removedCell is Bridge) {
-//                                    Room()
-//                                } else {
-//                                    Bridge()
-//                                }
-//                            }
-//                            Cell.Type.TERMINAL -> {
-//                                if (removedCell is Terminal) {
-//                                    callback.decreaseCPU()
-//                                    Room()
-//                                } else {
-//                                    callback.increaseCPU()
-//                                    Terminal()
-//                                }
-//                            }
-//                            else -> removedCell
-//                        }
-//                        items.add(position, newCell)
-//                    }
-//                }
-//                notifyDataSetChanged()
-//                callback.saveCellsLocal()
-//            }
-//            if (guest) {
-//                if (arrived) {
-//                    if (item is Pier) {
-//                        backgroundItem.setBackgroundResource(item.getDrawable())
-//                    } else if (item.hasPersons()) {
-//                        backgroundItem.setBackgroundResource(item.getDrawable())
-//                    } else if (getItemViewType(position) != ROOM) {
-//                        if (items[position - 1].hasPersons() || items[position + 1].hasPersons()) {
-//                            backgroundItem.setBackgroundResource(item.getDrawable())
-//                        }
-//                    } else {
-//                        backgroundItem.setBackgroundResource(R.drawable.ic_shadow)
-//                    }
-//                } else {
-//                    if (item is Pier) {
-//                        backgroundItem.setBackgroundResource(item.getDrawable())
-//                    } else {
-//                        backgroundItem.setBackgroundResource(R.drawable.ic_shadow)
-//                    }
-//                }
-//            } else {
-//                backgroundItem.setBackgroundResource(item.getDrawable())
-//            }
+            this.setOnClickListener {
+                if (guest) {
+                    if (!arrived) {
+                        if (item.room.type == Room.Type.PIER) {
+                            val piers = sheep.cells.filter { it.room.type == Room.Type.PIER }
+                            piers.forEach {
+                                it.room.persons = arrayListOf()
+                            }
+                            item.room.persons = callback.getSelectedGuests()
+                        }
+                    } else {
+
+                    }
+                } else {
+                    val type = callback.clickRoom()
+                    val canPlaceElement = sheep.cells[position].room.type != Room.Type.PIER
+                    if (canPlaceElement) {
+                        if (item.room.type == type) {
+                            item.room.type = Room.Type.ROOM
+                        } else {
+                            item.room.type = type
+                        }
+                    }
+                }
+                notifyDataSetChanged()
+                callback.saveCellsLocal()
+            }
+            if (guest) {
+                defineCellRoom(room, roomFog, item.room)
+                defineCellWall(rightWall, rightWallFog, item.rightWall)
+                defineCellWall(bottomWall, bottomWallFog, item.bottomWall)
+                defineCellWall(cross, crossFog, item.cross)
+            } else {
+                room.setBackgroundResource(item.room.getDrawable())
+                rightWall.setBackgroundResource(item.rightWall.getDrawable())
+                bottomWall.setBackgroundResource(item.bottomWall.getDrawable())
+                cross.setBackgroundResource(item.cross.getDrawable())
+            }
+        }
+    }
+
+    private fun defineCellRoom(
+        cellElement: View,
+        fogElement: View,
+        item: Room
+    ) {
+        if (item.visited) {
+            cellElement.setBackgroundResource(item.getDrawable())
+            if (item.show) {
+                fogElement.visibility = View.GONE
+            } else {
+                fogElement.visibility = View.VISIBLE
+            }
+        } else {
+            cellElement.setBackgroundResource(R.drawable.ic_shadow)
+            fogElement.visibility = View.GONE
+        }
+    }
+
+    private fun defineCellWall(
+        cellElement: View,
+        fogElement: View,
+        item: Wall
+    ) {
+        if (item.visited) {
+            cellElement.setBackgroundResource(item.getDrawable())
+            if (item.show) {
+                fogElement.visibility = View.GONE
+            } else {
+                fogElement.visibility = View.VISIBLE
+            }
+        } else {
+            cellElement.setBackgroundResource(R.drawable.ic_shadow)
+            fogElement.visibility = View.GONE
         }
     }
 
@@ -134,7 +132,7 @@ class GameCellsAdapter(
 
     interface Callback {
 
-        fun clickCell(): Cell.Type
+        fun clickRoom(): Room.Type
 
         fun saveCellsLocal()
 
@@ -142,6 +140,6 @@ class GameCellsAdapter(
 
         fun decreaseCPU()
 
-        fun getSelectedGuests(): java.util.ArrayList<Person>
+        fun getSelectedGuests(): ArrayList<Person>
     }
 }

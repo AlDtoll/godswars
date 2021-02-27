@@ -4,6 +4,7 @@ import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.cells.Cell
+import aldtoll.godswars.domain.model.cells.Room
 import aldtoll.godswars.domain.model.unit.Guest
 import aldtoll.godswars.domain.storage.*
 import androidx.lifecycle.LiveData
@@ -77,28 +78,27 @@ class GameScreenViewModel(
             placedInteractor.get(),
             cellsListInteractor.get(),
             Function5 { name: String, guestName: String, arrived: Boolean, placed: Boolean, cells: MutableList<Cell> ->
-                //                if (playerName != name) {
-//                    return@Function5 false
-//                } else {
-//                    if (guestName == playerName) {
-//                        if (!arrived) {
-//                            val filter = cells.filter { it.getType() == Cell.Type.PIER }
-//                            val find = filter.find { (it as Pier).persons?.isNotEmpty() ?: false }
-//                            find != null
-//                        } else {
-//                            true
-//                        }
-//                    } else {
-//                        if (!placed) {
-//                            cells.filter { it.getType() == Cell.Type.ENGINE }.size == 1 &&
-//                                    cells.filter { it.getType() == Cell.Type.BRIDGE }.size == 1 &&
-//                                    cells.filter { it.getType() == Cell.Type.REACTOR }.size == 1
-//                        } else {
-//                            true
-//                        }
-//                    }
-//                }
-                true
+                if (playerName != name) {
+                    return@Function5 false
+                } else {
+                    if (guestName == playerName) {
+                        if (!arrived) {
+                            val filter = cells.filter { it.room.type == Room.Type.PIER }
+                            val find = filter.find { it.room.persons?.isNotEmpty() ?: false }
+                            find != null
+                        } else {
+                            true
+                        }
+                    } else {
+                        if (!placed) {
+                            cells.filter { it.room.type == Room.Type.ENGINE }.size == 1 &&
+                                    cells.filter { it.room.type == Room.Type.BRIDGE }.size == 1 &&
+                                    cells.filter { it.room.type == Room.Type.REACTOR }.size == 1
+                        } else {
+                            true
+                        }
+                    }
+                }
             }
         )
         return LiveDataReactiveStreams.fromPublisher(

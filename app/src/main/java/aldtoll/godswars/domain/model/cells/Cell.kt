@@ -5,8 +5,10 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class Cell(
     val room: Room = Room(),
+    val upWall: Wall = Wall(true),
     val rightWall: Wall = Wall(),
     val bottomWall: Wall = Wall(true),
+    val leftWall: Wall = Wall(),
     val cross: Wall = Wall()
 ) {
 
@@ -16,6 +18,11 @@ data class Cell(
             var room = Room()
             if (roomMap != null) {
                 room = Room.fromMap(roomMap as HashMap<String, Any>)
+            }
+            val upWallMap = map["upWall"]
+            var upWall = Wall()
+            if (upWallMap != null) {
+                upWall = Wall.fromMap(upWallMap as HashMap<String, Any>)
             }
             val rightWallMap = map["rightWall"]
             var rightWall = Wall()
@@ -27,6 +34,11 @@ data class Cell(
             if (roomMap != null) {
                 bottomWall = Wall.fromMap(bottomWallMap as HashMap<String, Any>)
             }
+            val leftWallMap = map["leftWall"]
+            var leftWall = Wall()
+            if (leftWallMap != null) {
+                leftWall = Wall.fromMap(rightWallMap as HashMap<String, Any>)
+            }
             val crossMap = map["cross"]
             var cross = Wall()
             if (crossMap != null) {
@@ -34,22 +46,21 @@ data class Cell(
             }
             return Cell(
                 room,
+                upWall,
                 rightWall,
                 bottomWall,
+                leftWall,
                 cross
             )
         }
     }
 
-    enum class Type {
-        ROOM,
-        WALL,
-        DOOR,
-        EMPTY,
-        PIER,
-        ENGINE,
-        REACTOR,
-        BRIDGE,
-        TERMINAL
+
+    fun visit() {
+        room.visited = true
+        upWall.visited = true
+        rightWall.visited = true
+        bottomWall.visited = true
+        leftWall.visited = true
     }
 }
