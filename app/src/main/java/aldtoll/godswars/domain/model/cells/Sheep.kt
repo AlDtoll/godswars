@@ -25,4 +25,36 @@ class Sheep(
             cells[position + 1].leftWall.visited = true
         }
     }
+
+    fun show(position: Int) {
+        visit(position)
+        cells[position].show()
+        changeShowStatus(position, true)
+    }
+
+    fun hide(position: Int) {
+        cells[position].hide()
+        changeShowStatus(position, false)
+    }
+
+    fun hide(cell: Cell) {
+        hide(cells.indexOf(cell))
+    }
+
+    private fun changeShowStatus(position: Int, show: Boolean) {
+        val rowNumber = position / (COLUMN_NUMBER)
+        val columnNumber = position % (COLUMN_NUMBER)
+        if (rowNumber != 0) {
+            cells[position - COLUMN_NUMBER].bottomWall.show = show
+        }
+        if (rowNumber != DatabaseInteractor.ROW_NUMBER - 1) {
+            cells[position + COLUMN_NUMBER].upWall.show = show
+        }
+        if (columnNumber != 0) {
+            cells[position - 1].rightWall.show = show
+        }
+        if (columnNumber != COLUMN_NUMBER - 1) {
+            cells[position + 1].leftWall.show = show
+        }
+    }
 }

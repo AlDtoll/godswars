@@ -55,11 +55,19 @@ class GameCellsAdapter(
                 if (guest) {
                     if (!arrived) {
                         if (item.room.type == Room.Type.PIER) {
-                            val piers = sheep.cells.filter { it.room.type == Room.Type.PIER }
-                            piers.forEach {
-                                it.room.persons = arrayListOf()
+                            val selectedGuests = callback.getSelectedGuests()
+                            if (item.room.persons == selectedGuests) {
+                                item.room.persons = arrayListOf()
+                                sheep.hide(position)
+                            } else {
+                                val piers = sheep.cells.filter { it.room.type == Room.Type.PIER }
+                                piers.forEach {
+                                    it.room.persons = arrayListOf()
+                                    sheep.hide(it)
+                                }
+                                item.room.persons = selectedGuests
+                                sheep.show(position)
                             }
-                            item.room.persons = callback.getSelectedGuests()
                         }
                     } else {
 

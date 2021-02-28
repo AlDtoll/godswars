@@ -63,4 +63,20 @@ data class Cell(
         bottomWall.visited = true
         leftWall.visited = true
     }
+
+    fun show() {
+        room.show = true
+        upWall.show = true
+        rightWall.show = true
+        bottomWall.show = true
+        leftWall.show = true
+    }
+
+    fun hide() {
+        room.show = false
+        upWall.show = false
+        rightWall.show = false
+        bottomWall.show = false
+        leftWall.show = false
+    }
 }
