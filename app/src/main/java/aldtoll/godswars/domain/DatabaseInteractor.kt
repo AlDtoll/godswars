@@ -34,49 +34,14 @@ class DatabaseInteractor(
         val myRef = database.getReference("cells")
         val list = mutableListOf<Cell>()
         for (i in 0 until (COLUMN_NUMBER) * (ROW_NUMBER)) {
-            list.add(Cell())
+            list.add(Cell(i.toLong()))
         }
-//        for (i in 0 until list.size) {
-//            val rowNumber = i / (COLUMN_NUMBER)
-//            val columnNumber = i % (COLUMN_NUMBER)
-//            if (rowNumber != 0) {
-//                list[i].upCell = list[i - COLUMN_NUMBER]
-//            }
-//            if (rowNumber != ROW_NUMBER - 1) {
-//                list[i].bottomCell = list[i + COLUMN_NUMBER]
-//            }
-//            if (columnNumber != 0) {
-//                list[i].leftCell = list[i - 1]
-//            }
-//            if (columnNumber != COLUMN_NUMBER - 1) {
-//                list[i].rightCell = list[i + 1]
-//            }
-//        }
-//        val list =
-//            MutableList((COLUMN_NUMBER) * (ROW_NUMBER)) { index ->
-//                val rowNumber = index / (COLUMN_NUMBER)
-//                val columnNumber = index % (COLUMN_NUMBER)
-////                if (index == COLUMN_NUMBER) {
-////                    Cell(Room(), Wall(Wall.Type.NO))
-////                }
-////                if (rowNumber % 2 == 1 && columnNumber % 2 == 1) {
-////                    Empty()
-////                } else if (columnNumber % 2 == 1) {
-////                    Empty()
-////                } else if (rowNumber % 2 == 1) {
-////                    Empty()
-////                } else {
-////                    Room()
-////                }
-//                Cell()
-//            }
         myRef.setValue(list)
         cellsListInteractor.update(list)
     }
 
     override fun saveMap() {
         val myRef = database.getReference("cells")
-
         myRef.setValue(cellsListInteractor.value())
     }
 
@@ -294,14 +259,14 @@ class DatabaseInteractor(
         ref.setValue(guestNameInteractor.value())
     }
 
-    override fun placed() {
+    override fun placed(placed: Boolean) {
         val ref = database.getReference("placed")
-        ref.setValue(true)
+        ref.setValue(placed)
     }
 
-    override fun arrived() {
+    override fun arrived(arrived: Boolean) {
         val ref = database.getReference("arrived")
-        ref.setValue(true)
+        ref.setValue(arrived)
     }
 
     override fun saveWatchman() {

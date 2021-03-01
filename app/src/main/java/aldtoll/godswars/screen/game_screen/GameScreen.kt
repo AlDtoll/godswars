@@ -180,6 +180,9 @@ class GameScreen : Fragment() {
     private fun showCellsData(cells: List<Cell>) {
         val sheep = Sheep()
         sheep.cells = ArrayList(cells)
+        if (gameCellsAdapter?.arrived == true) {
+            sheep.showGuests()
+        }
         gameCellsAdapter?.sheep = sheep
     }
 

@@ -63,7 +63,7 @@ class GameCellsAdapter(
                                 val piers = sheep.cells.filter { it.room.type == Room.Type.PIER }
                                 piers.forEach {
                                     it.room.persons = arrayListOf()
-                                    sheep.hide(it)
+                                    sheep.hide(it.position.toInt())
                                 }
                                 item.room.persons = selectedGuests
                                 sheep.show(position)

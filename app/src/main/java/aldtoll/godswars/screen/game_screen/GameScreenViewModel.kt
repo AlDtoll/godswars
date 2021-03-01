@@ -37,7 +37,7 @@ class GameScreenViewModel(
 
     override fun cellsData(): LiveData<MutableList<Cell>> {
         return LiveDataReactiveStreams.fromPublisher(
-            cellsListInteractor.get().toFlowable(BackpressureStrategy.BUFFER)
+            cellsListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
@@ -122,11 +122,11 @@ class GameScreenViewModel(
     }
 
     override fun placed() {
-        databaseInteractor.placed()
+        databaseInteractor.placed(true)
     }
 
     override fun arrived() {
-        databaseInteractor.arrived()
+        databaseInteractor.arrived(true)
     }
 
     override fun cellsPanelVisibilityData(): LiveData<Boolean> {
@@ -241,8 +241,24 @@ class GameScreenViewModel(
     }
 
     override fun personsData(): LiveData<MutableList<Guest>> {
+        val observable = Observable.combineLatest(
+            guestListInteractor.get(),
+            arrivedInteractor.get(),
+            guestNameInteractor.get(),
+            Function3 { guests: MutableList<Guest>, arrived: Boolean, guestName: String ->
+                if (guestName == playerName) {
+                    if (arrived) {
+                        mutableListOf()
+                    } else {
+                        guests
+                    }
+                } else {
+                    mutableListOf()
+                }
+            }
+        )
         return LiveDataReactiveStreams.fromPublisher(
-            guestListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+            observable.toFlowable(BackpressureStrategy.LATEST)
         )
     }
 }

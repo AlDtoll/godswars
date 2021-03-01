@@ -4,6 +4,10 @@
     <string name="menu_action_init_map">Создать карту</string>
     <string name="menu_action_restart_map">Сбросить карту</string>
     <string name="menu_action_restart_player">Сбросить выбор игроков</string>
+    <string name="menu_action_give_turn_to_watchman">Передать ход ИИ</string>
+    <string name="menu_action_give_turn_to_guest">Передать ход гостю</string>
+    <string name="menu_action_unplaced">Снять размещение</string>
+    <string name="menu_action_unarrived">Снять прибытие</string>
 
     <string name="start_game_text">Начать игру</string>
     <string name="create_map">Создать карту</string>

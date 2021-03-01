@@ -18,9 +18,9 @@ interface IDatabaseInteractor {
 
     fun giveTurnToGuest()
 
-    fun placed()
+    fun placed(placed: Boolean)
 
-    fun arrived()
+    fun arrived(arrived: Boolean)
 
     fun saveWatchman()
 }

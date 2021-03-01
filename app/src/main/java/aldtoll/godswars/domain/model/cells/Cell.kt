@@ -4,6 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class Cell(
+    val position: Long = 0L,
     val room: Room = Room(),
     val upWall: Wall = Wall(true),
     val rightWall: Wall = Wall(),
@@ -37,7 +38,7 @@ data class Cell(
             val leftWallMap = map["leftWall"]
             var leftWall = Wall()
             if (leftWallMap != null) {
-                leftWall = Wall.fromMap(rightWallMap as HashMap<String, Any>)
+                leftWall = Wall.fromMap(leftWallMap as HashMap<String, Any>)
             }
             val crossMap = map["cross"]
             var cross = Wall()
@@ -45,6 +46,7 @@ data class Cell(
                 cross = Wall.fromMap(crossMap as HashMap<String, Any>)
             }
             return Cell(
+                map["position"] as Long,
                 room,
                 upWall,
                 rightWall,

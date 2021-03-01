@@ -11,4 +11,20 @@
     <item
         android:id="@+id/action_restart_player"
         android:title="@string/menu_action_restart_player" />
+
+    <item
+        android:id="@+id/action_turn_to_watchman"
+        android:title="@string/menu_action_give_turn_to_watchman" />
+
+    <item
+        android:id="@+id/action_turn_to_guest"
+        android:title="@string/menu_action_give_turn_to_guest" />
+
+    <item
+        android:id="@+id/action_unplaced"
+        android:title="@string/menu_action_unplaced" />
+
+    <item
+        android:id="@+id/action_unarrived"
+        android:title="@string/menu_action_unarrived" />
 </menu>

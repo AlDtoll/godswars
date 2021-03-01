@@ -39,6 +39,10 @@ class MainViewModel(
             R.id.action_init_map -> initMap()
             R.id.action_restart_map -> restartMap()
             R.id.action_restart_player -> restartPlayer()
+            R.id.action_turn_to_watchman -> databaseInteractor.giveTurnToWatchman()
+            R.id.action_turn_to_guest -> databaseInteractor.giveTurnToGuest()
+            R.id.action_unplaced -> databaseInteractor.placed(false)
+            R.id.action_unarrived -> databaseInteractor.arrived(false)
             android.R.id.home -> onBackPressed()
         }
     }
