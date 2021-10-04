@@ -27,4 +27,5 @@
 
     <color name="select_color">#437AD1</color>
     <color name="terra_incognito_color">#801D1D1D</color>
+    <color name="select_element_color">#4D437AD1</color>
 </resources>

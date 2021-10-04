@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_person_card.view.*
 
-class PersonsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PersonsAdapter(
+    private val callback: Callback
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items = ArrayList<Person>()
         set(data) {
             field = data
             notifyDataSetChanged()
         }
+
+    var selectedPerson: Person? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder {
         return PersonHolder(
@@ -34,9 +38,13 @@ class PersonsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (item is Guest) {
                 personName.text = item.name
             }
+            this.setOnClickListener {
+                callback.selectPerson(item)
+                selectedPerson = item
+            }
             val hp = "${item.hp}%"
             personHp.text = hp
-            val ap = "${item.ap}"
+            val ap = "AP: ${item.ap}/${item.maxAp}"
             personAp.text = ap
         }
     }
@@ -44,4 +52,9 @@ class PersonsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
     class PersonHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface Callback {
+
+        fun selectPerson(person: Person)
+    }
 }

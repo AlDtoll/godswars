@@ -1,10 +1,10 @@
 package aldtoll.godswars.routing
 
-class RouteToGameScreenInteractor(
+class RouteToGuestsScreenInteractor(
     private val router: IRouter
 ) {
 
     fun execute() {
-        router.routeToGameScreen()
+        router.routeToGuestsScreen()
     }
 }

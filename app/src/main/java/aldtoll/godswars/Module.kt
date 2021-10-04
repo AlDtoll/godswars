@@ -2,10 +2,14 @@ package aldtoll.godswars
 
 import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.IDatabaseInteractor
+import aldtoll.godswars.domain.executor.EndTurnInteractor
+import aldtoll.godswars.domain.executor.IEndTurnInteractor
 import aldtoll.godswars.domain.storage.*
 import aldtoll.godswars.routing.*
-import aldtoll.godswars.screen.game_screen.GameScreenViewModel
-import aldtoll.godswars.screen.game_screen.IGameScreenViewModel
+import aldtoll.godswars.screen.game_screen.guest_screen.GuestsScreenViewModel
+import aldtoll.godswars.screen.game_screen.guest_screen.IGuestsScreenViewModel
+import aldtoll.godswars.screen.game_screen.watchman_screen.IWatchmanScreenViewModel
+import aldtoll.godswars.screen.game_screen.watchman_screen.WatchmanScreenViewModel
 import aldtoll.godswars.screen.map_screen.IMapEditorScreenViewModel
 import aldtoll.godswars.screen.map_screen.MapScreenEditorScreenViewModel
 import aldtoll.godswars.screen.select_player_screen.ISelectPlayerScreenViewModel
@@ -28,7 +32,20 @@ val appModule = module {
     single { StartScreenViewModel(get(), get()) as IStartScreenViewModel }
     single { MapScreenEditorScreenViewModel(get(), get()) as IMapEditorScreenViewModel }
     single {
-        GameScreenViewModel(
+        GuestsScreenViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IGuestsScreenViewModel
+    }
+    single {
+        WatchmanScreenViewModel(
+            get(),
             get(),
             get(),
             get(),
@@ -38,10 +55,14 @@ val appModule = module {
             get(),
             get(),
             get()
-        ) as IGameScreenViewModel
+        ) as IWatchmanScreenViewModel
     }
     single {
         SelectPlayerScreenViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
             get(),
             get(),
             get(),
@@ -73,14 +94,18 @@ val appModule = module {
     single { ArrivedInteractor() as IArrivedInteractor }
     single { ActionPointsInteractor() as IActionPointsInteractor }
     single { GuestListInteractor() as IGuestListInteractor }
-    single { SelectedGuestInteractor() as ISelectedGuestInteractor }
+    single { SelectedPersonInteractor() as ISelectedPersonInteractor }
     single { WatchmanInteractor() as IWatchmanInteractor }
+    single { SelectedPersonListInteractor() as ISelectedPersonListInteractor }
+
+    single { EndTurnInteractor(get(), get(), get(), get(), get()) as IEndTurnInteractor }
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
     single { RouteToStartScreenInteractor(get()) }
     single { RouteToMapScreenIntreactor(get()) }
     single { RouteToSelectPlayerScreenInteractor(get()) }
-    single { RouteToGameScreenInteractor(get()) }
+    single { RouteToGuestsScreenInteractor(get()) }
+    single { RouteToWatchmanScreenInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
 }

@@ -8,16 +8,21 @@ import com.google.firebase.database.IgnoreExtraProperties
 data class Room(
     var visited: Boolean = false,
     var show: Boolean = false,
-    var persons: List<Person>? = null,
-    var type: Type = Type.ROOM
+    var persons: MutableList<Person>? = null,
+    var type: Type = Type.ROOM,
+    var selected: Boolean = false,
+    var enabled: Boolean = false
 ) {
 
     companion object {
         fun fromMap(map: HashMap<String, Any>): Room {
             val personsMap = map["persons"]
-            var persons = listOf<Person>()
+            val persons = mutableListOf<Person>()
             if (personsMap != null) {
-                persons = personsMap as List<Person>
+                val personsList = personsMap as ArrayList<HashMap<String, Any>>
+                personsList.forEach {
+                    persons.add(Person.fromMap(it))
+                }
             }
             return Room(
                 map["visited"] as Boolean,
@@ -30,7 +35,11 @@ data class Room(
 
     fun getDrawable(): Int {
         return when (type) {
-            Type.ROOM -> R.drawable.ic_room
+            Type.ROOM -> if (persons.isNullOrEmpty()) {
+                R.drawable.ic_room
+            } else {
+                R.drawable.ic_room_with_alien
+            }
             Type.EMPTY -> R.drawable.ic_empty_cell
             Type.PIER -> {
                 if (persons.isNullOrEmpty()) {

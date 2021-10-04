@@ -24,18 +24,31 @@ class DatabaseInteractor(
 ) : IDatabaseInteractor {
 
     companion object {
-        const val COLUMN_NUMBER = 6
-        const val ROW_NUMBER = 7
+        const val ROOM_COLUMN_NUMBER = 6
+        private const val VERTICAL_WALL_NUMBER = ROOM_COLUMN_NUMBER - 1
+        const val COLUMN_NUMBER = ROOM_COLUMN_NUMBER + VERTICAL_WALL_NUMBER
+        const val ROW_NUMBER = 10
     }
 
     private val database = Firebase.database
 
     override fun clearCells() {
         val myRef = database.getReference("cells")
-        val list = mutableListOf<Cell>()
-        for (i in 0 until (COLUMN_NUMBER) * (ROW_NUMBER)) {
-            list.add(Cell(i.toLong()))
-        }
+        val list =
+            MutableList((COLUMN_NUMBER) * (ROW_NUMBER)) { index ->
+                val rowNumber = index / (COLUMN_NUMBER)
+                val columnNumber = index % (COLUMN_NUMBER)
+                val type: Cell.Type = if (rowNumber % 2 == 1 && columnNumber % 2 == 1) {
+                    Cell.Type.EMPTY
+                } else if (columnNumber % 2 == 1) {
+                    Cell.Type.EMPTY
+                } else if (rowNumber % 2 == 1) {
+                    Cell.Type.EMPTY
+                } else {
+                    Cell.Type.ROOM
+                }
+                Cell(index.toLong(), type)
+            }
         myRef.setValue(list)
         cellsListInteractor.update(list)
     }
@@ -137,6 +150,9 @@ class DatabaseInteractor(
                         placedInteractor.update(value)
                     }
                 }
+                if (value == null) {
+                    placedInteractor.update(false)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -154,6 +170,9 @@ class DatabaseInteractor(
                     if (value is Boolean) {
                         arrivedInteractor.update(value)
                     }
+                }
+                if (value == null) {
+                    arrivedInteractor.update(false)
                 }
             }
 

@@ -4,5 +4,5 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class ActionPoint(
-    val active: Boolean = false
+    var active: Boolean = false
 )

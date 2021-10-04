@@ -1,12 +1,12 @@
-package aldtoll.godswars.screen.game_screen
+package aldtoll.godswars.screen.game_screen.guest_screen
 
 import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.cells.Cell
-import aldtoll.godswars.domain.model.unit.Guest
+import aldtoll.godswars.domain.model.unit.Person
 import androidx.lifecycle.LiveData
 import java.util.*
 
-interface IGameScreenViewModel {
+interface IGuestsScreenViewModel {
 
     fun saveCellsLocal(cells: ArrayList<Cell>)
 
@@ -14,19 +14,9 @@ interface IGameScreenViewModel {
 
     fun endTurn()
 
-    fun isGuestData(): LiveData<Boolean>
-
     fun enableTurnButtonData(): LiveData<Boolean>
 
-    fun isPlacedData(): LiveData<Boolean>
-
     fun isArrivedData(): LiveData<Boolean>
-
-    fun placed()
-
-    fun arrived()
-
-    fun cellsPanelVisibilityData(): LiveData<Boolean>
 
     fun turnButtonTextData(): LiveData<String>
 
@@ -34,10 +24,12 @@ interface IGameScreenViewModel {
 
     fun actionPointsData(): LiveData<MutableList<ActionPoint>>
 
-    fun increaseMaxActionPoints(points: Int)
+    fun personsData(): LiveData<MutableList<Person>>
 
-    fun decreaseMaxActionPoint(points: Int)
+    fun selectPerson(person: Person)
 
-    fun personsData(): LiveData<MutableList<Guest>>
+    fun selectedPersonData(): LiveData<Person>
+
+    fun clickCell(item: Cell)
 
 }

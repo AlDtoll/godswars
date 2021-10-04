@@ -2,6 +2,7 @@ package aldtoll.godswars
 
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.routing.IGetNowScreenInteractor
+import aldtoll.godswars.routing.NowScreen
 import aldtoll.godswars.routing.OnBackPressedInteractor
 import aldtoll.godswars.routing.RouteToStartScreenInteractor
 import android.view.MenuItem

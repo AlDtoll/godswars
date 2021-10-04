@@ -8,7 +8,9 @@ data class Wall(
     val horizontal: Boolean = false,
     var type: Type = Type.EMPTY,
     var visited: Boolean = false,
-    var show: Boolean = false
+    var show: Boolean = false,
+    var selected: Boolean = false,
+    var enabled: Boolean = false
 ) {
 
     companion object {

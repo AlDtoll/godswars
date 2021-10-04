@@ -1,27 +1,23 @@
 package aldtoll.godswars.screen.map_screen
 
-import aldtoll.godswars.R
+import aldtoll.godswars.databinding.FragmentMapEditorBinding
 import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.model.cells.Cell
-import aldtoll.godswars.domain.model.cells.Room
-import aldtoll.godswars.domain.model.cells.Sheep
-import aldtoll.godswars.domain.model.cells.Wall
+import aldtoll.godswars.domain.model.cells.StarShip
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.android.synthetic.main.fragment_map_editor.*
 import org.koin.android.ext.android.inject
 
 
 class MapEditorScreen : Fragment() {
 
+    private lateinit var binding: FragmentMapEditorBinding
     private val mapEditorScreenViewModel: IMapEditorScreenViewModel by inject()
-    private var roomType: Room.Type = Room.Type.ROOM
-    private var wallType: Wall.Type = Wall.Type.EMPTY
+    private var cellType: Cell.Type = Cell.Type.ROOM
 
     companion object {
         fun newInstance(): MapEditorScreen =
@@ -32,8 +28,11 @@ class MapEditorScreen : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_map_editor, container, false)
+    ): View {
+        if (!::binding.isInitialized) {
+            binding = FragmentMapEditorBinding.inflate(inflater, container, false)
+        }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,43 +41,38 @@ class MapEditorScreen : Fragment() {
     }
 
     private fun initUi() {
-        mapEditorScreenViewModel.cellsData().observe(viewLifecycleOwner, Observer {
+        mapEditorScreenViewModel.cellsData().observe(viewLifecycleOwner, {
             it?.run {
                 showData(it)
             }
         })
 
-        roomCell.setOnClickListener {
-            roomType = Room.Type.ROOM
+        binding.roomCell.setOnClickListener {
+            cellType = Cell.Type.ROOM
         }
-        doorCell.setOnClickListener {
-            wallType = Wall.Type.DOOR
+        binding.doorCell.setOnClickListener {
+            cellType = Cell.Type.DOOR
         }
-        emptyCell.setOnClickListener {
-            wallType = Wall.Type.EMPTY
-            roomType = Room.Type.EMPTY
+        binding.emptyCell.setOnClickListener {
+            cellType = Cell.Type.EMPTY
         }
-        wallCell.setOnClickListener {
-            wallType = Wall.Type.WALL
+        binding.wallCell.setOnClickListener {
+            cellType = Cell.Type.WALL
         }
-        pierCell.setOnClickListener {
-            roomType = Room.Type.PIER
+        binding.pierCell.setOnClickListener {
+            cellType = Cell.Type.PIER
         }
 
         initRecyclerView()
     }
 
     private val callback = object : MapEditorCellsAdapter.Callback {
-        override fun clickRoom(): Room.Type {
-            return roomType
-        }
-
-        override fun clickWall(): Wall.Type {
-            return wallType
+        override fun clickCell(): Cell.Type {
+            return cellType
         }
 
         override fun saveItems() {
-            mapEditorScreenViewModel.saveCells(mapEditorCellsAdapter.sheep.cells)
+            mapEditorScreenViewModel.saveCells(mapEditorCellsAdapter.starShip.cells)
         }
 
     }
@@ -87,18 +81,31 @@ class MapEditorScreen : Fragment() {
 
     private fun initRecyclerView() {
         mapEditorCellsAdapter = MapEditorCellsAdapter(callback)
-        cells.adapter = mapEditorCellsAdapter
+        binding.cells.adapter = mapEditorCellsAdapter
+        val value = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val columnNumber = position % DatabaseInteractor.COLUMN_NUMBER
+                return when (columnNumber % 2) {
+                    1 -> 1
+                    else -> 2
+                }
+            }
+        }
         context?.run {
             val gridLayoutManager =
-                GridLayoutManager(this, DatabaseInteractor.COLUMN_NUMBER)
-            cells.layoutManager = gridLayoutManager
+                GridLayoutManager(
+                    this,
+                    DatabaseInteractor.COLUMN_NUMBER + DatabaseInteractor.ROOM_COLUMN_NUMBER
+                )
+            gridLayoutManager.spanSizeLookup = value
+            binding.cells.layoutManager = gridLayoutManager
         }
     }
 
     private fun showData(cells: List<Cell>) {
-        val sheep = Sheep()
-        sheep.cells = ArrayList(cells)
-        mapEditorCellsAdapter.sheep = sheep
+        val starShip = StarShip()
+        starShip.cells = ArrayList(cells)
+        mapEditorCellsAdapter.starShip = starShip
     }
 
 }

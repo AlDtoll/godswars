@@ -12,10 +12,34 @@
         android:layout_height="@dimen/wall_size">
 
         <ImageView
-            android:id="@+id/backgroundItem"
+            android:id="@+id/wall"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:background="@drawable/ic_wall" />
+            android:rotation="90"
+            android:scaleX="0.5"
+            android:scaleY="2"
+            tools:background="@drawable/ic_vertical_door_closed" />
+
+        <ImageView
+            android:id="@+id/wallFog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/terra_incognito_color"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/wallSelect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/select_element_color"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/wallEnabled"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_enabled"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

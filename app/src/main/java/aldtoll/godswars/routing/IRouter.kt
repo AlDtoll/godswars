@@ -1,6 +1,5 @@
 package aldtoll.godswars.routing
 
-import aldtoll.godswars.NowScreen
 import io.reactivex.Observable
 
 interface IRouter {
@@ -13,7 +12,9 @@ interface IRouter {
 
     fun routeToSelectPlayerScreen()
 
-    fun routeToGameScreen()
+    fun routeToGuestsScreen()
+
+    fun routeToWatchmanScreen()
 
     fun onBackPressed()
 }

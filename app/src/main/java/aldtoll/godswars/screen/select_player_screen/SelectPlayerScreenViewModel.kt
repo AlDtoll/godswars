@@ -4,7 +4,8 @@ import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.storage.*
-import aldtoll.godswars.routing.RouteToGameScreenInteractor
+import aldtoll.godswars.routing.RouteToGuestsScreenInteractor
+import aldtoll.godswars.routing.RouteToWatchmanScreenInteractor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.google.firebase.database.ktx.database
@@ -16,14 +17,18 @@ class SelectPlayerScreenViewModel(
     private val databaseInteractor: IDatabaseInteractor,
     private val guestNameInteractor: IGuestNameInteractor,
     private val watchmanNameInteractor: IWatchmanNameInteractor,
-    private val routeToGameScreenInteractor: RouteToGameScreenInteractor,
+    private val routeToGuestsScreenInteractor: RouteToGuestsScreenInteractor,
+    private val routeToWatchmanScreenInteractor: RouteToWatchmanScreenInteractor,
     private val playerTurnInteractor: IPlayerTurnInteractor,
     private val actionPointsInteractor: IActionPointsInteractor,
-    private val watchmanInteractor: IWatchmanInteractor
+    private val watchmanInteractor: IWatchmanInteractor,
+    private val guestListInteractor: IGuestListInteractor,
+    private val selectedPersonListInteractor: ISelectedPersonListInteractor,
+    private val arrivedInteractor: IArrivedInteractor
 ) : ISelectPlayerScreenViewModel {
 
     private var guestName = PublishSubject.create<String>()
-    val database = Firebase.database
+    private val database = Firebase.database
 
     override fun selectWatchman(watchmanName: String) {
         val myRef = database.getReference("watchmanName")
@@ -64,18 +69,29 @@ class SelectPlayerScreenViewModel(
 
     override fun startGame() {
         //todo нужно переделать, когда можно будет пропускать экран выбора игрока
-        if (playerTurnInteractor.value().isEmpty()) {
+        val gameNotStartedYet = playerTurnInteractor.value().isEmpty()
+        if (gameNotStartedYet) {
             databaseInteractor.giveTurnToWatchman()
         }
         val playerName = App.getPref()?.getString("playerName", "")
-        if (playerName != guestNameInteractor.value()) {
+        val isWatchman = playerName != guestNameInteractor.value()
+        if (isWatchman) {
             val watchman = watchmanInteractor.value()
-            val mutableList = mutableListOf<ActionPoint>()
-            for (i in 1..watchman.cp) {
-                mutableList.add(ActionPoint())
+            val actionPoints = mutableListOf<ActionPoint>()
+            for (i in 1..watchman.maxCp) {
+                actionPoints.add(ActionPoint())
             }
-            actionPointsInteractor.update(mutableList)
+            actionPointsInteractor.update(actionPoints)
+        } else {
+            if (!arrivedInteractor.value()) {
+                val guests = guestListInteractor.value()
+                selectedPersonListInteractor.update(guests.toMutableList())
+            }
         }
-        routeToGameScreenInteractor.execute()
+        if (isWatchman) {
+            routeToWatchmanScreenInteractor.execute()
+        } else {
+            routeToGuestsScreenInteractor.execute()
+        }
     }
 }

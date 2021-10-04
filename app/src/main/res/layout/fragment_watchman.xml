@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/watchmanScreenCellsPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_small_8"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/reactorCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:padding="1dp"
+            android:src="@drawable/ic_reactor"
+            tools:background="@color/select_color" />
+
+        <ImageView
+            android:id="@+id/engineCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:padding="1dp"
+            android:src="@drawable/ic_engine" />
+
+        <ImageView
+            android:id="@+id/bridgeCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:padding="1dp"
+            android:src="@drawable/ic_servers" />
+
+        <ImageView
+            android:id="@+id/terminalCell"
+            android:layout_width="@dimen/room_size"
+            android:layout_height="@dimen/room_size"
+            android:layout_marginStart="@dimen/room_size"
+            android:padding="1dp"
+            android:src="@drawable/ic_terminal" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/watchmanScreenPersonsList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/padding_small_8"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/watchmanScreenCellsPanel"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_person_card" />
+
+    <TextView
+        android:id="@+id/watchmanScreenPlayerTurnStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_small_8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/watchmanScreenPersonsList"
+        tools:text="Твой ход" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/watchmanScreenActionPoints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/padding_small_8"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/watchmanScreenPlayerTurnStatus"
+        tools:itemCount="18"
+        tools:listitem="@layout/item_action_point" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/watchmanScreenCells"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/padding_small_8"
+        android:layout_marginBottom="@dimen/padding_small_8"
+        android:clipToPadding="true"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/watchmanScreenActionPoints"
+        tools:itemCount="36"
+        tools:listitem="@layout/item_cell"
+        tools:spanCount="6" />
+
+    <include
+        android:id="@+id/watchmanSelectedPersonCard"
+        layout="@layout/item_person_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_small_8"
+        android:layout_marginTop="@dimen/padding_small_8"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/watchmanScreenCells"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/watchmanScreenEndTurnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/end_turn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

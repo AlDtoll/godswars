@@ -1,84 +1,89 @@
 package aldtoll.godswars.domain.model.cells
 
+import aldtoll.godswars.R
+import aldtoll.godswars.domain.model.unit.Person
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class Cell(
     val position: Long = 0L,
-    val room: Room = Room(),
-    val upWall: Wall = Wall(true),
-    val rightWall: Wall = Wall(),
-    val bottomWall: Wall = Wall(true),
-    val leftWall: Wall = Wall(),
-    val cross: Wall = Wall()
+    var type: Type = Type.ROOM,
+    var visited: Boolean = false,
+    var show: Boolean = false,
+    var persons: MutableList<Person>? = null,
+    var selected: Boolean = false,
+    var enabled: Boolean = false
 ) {
 
     companion object {
         fun fromMap(map: HashMap<String, Any>): Cell {
-            val roomMap = map["room"]
-            var room = Room()
-            if (roomMap != null) {
-                room = Room.fromMap(roomMap as HashMap<String, Any>)
-            }
-            val upWallMap = map["upWall"]
-            var upWall = Wall()
-            if (upWallMap != null) {
-                upWall = Wall.fromMap(upWallMap as HashMap<String, Any>)
-            }
-            val rightWallMap = map["rightWall"]
-            var rightWall = Wall()
-            if (rightWallMap != null) {
-                rightWall = Wall.fromMap(rightWallMap as HashMap<String, Any>)
-            }
-            val bottomWallMap = map["bottomWall"]
-            var bottomWall = Wall(true)
-            if (roomMap != null) {
-                bottomWall = Wall.fromMap(bottomWallMap as HashMap<String, Any>)
-            }
-            val leftWallMap = map["leftWall"]
-            var leftWall = Wall()
-            if (leftWallMap != null) {
-                leftWall = Wall.fromMap(leftWallMap as HashMap<String, Any>)
-            }
-            val crossMap = map["cross"]
-            var cross = Wall()
-            if (crossMap != null) {
-                cross = Wall.fromMap(crossMap as HashMap<String, Any>)
+            val personsMap = map["persons"]
+            val persons = mutableListOf<Person>()
+            if (personsMap != null) {
+                val personsList = personsMap as ArrayList<HashMap<String, Any>>
+                personsList.forEach {
+                    persons.add(Person.fromMap(it))
+                }
             }
             return Cell(
                 map["position"] as Long,
-                room,
-                upWall,
-                rightWall,
-                bottomWall,
-                leftWall,
-                cross
+                Type.valueOf(map["type"] as String),
+                map["visited"] as Boolean,
+                map["show"] as Boolean,
+                persons
             )
         }
     }
 
+    fun getDrawable(): Int {
+        return when (type) {
+            Type.ROOM -> if (persons.isNullOrEmpty()) {
+                R.drawable.ic_room
+            } else {
+                R.drawable.ic_room_with_alien
+            }
+            Type.EMPTY -> R.drawable.ic_empty_cell
+            Type.PIER -> {
+                if (persons.isNullOrEmpty()) {
+                    R.drawable.ic_pier_cell
+                } else {
+                    R.drawable.ic_pier_with_alien
+                }
+            }
+            Type.ENGINE -> R.drawable.ic_engine
+            Type.REACTOR -> R.drawable.ic_reactor
+            Type.BRIDGE -> R.drawable.ic_servers
+            Type.TERMINAL -> R.drawable.ic_terminal
+            Type.WALL -> R.drawable.ic_wall
+            Type.DOOR -> R.drawable.ic_vertical_door_locked
+        }
+    }
 
     fun visit() {
-        room.visited = true
-        upWall.visited = true
-        rightWall.visited = true
-        bottomWall.visited = true
-        leftWall.visited = true
+        visited = true
     }
 
     fun show() {
-        room.show = true
-        upWall.show = true
-        rightWall.show = true
-        bottomWall.show = true
-        leftWall.show = true
+        show = true
     }
 
     fun hide() {
-        room.show = false
-        upWall.show = false
-        rightWall.show = false
-        bottomWall.show = false
-        leftWall.show = false
+        show = false
+    }
+
+    fun disable() {
+        enabled = false
+    }
+
+    enum class Type {
+        ROOM,
+        EMPTY,
+        PIER,
+        ENGINE,
+        REACTOR,
+        BRIDGE,
+        TERMINAL,
+        WALL,
+        DOOR,
     }
 }

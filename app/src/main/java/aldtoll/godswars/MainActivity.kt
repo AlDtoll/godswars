@@ -1,7 +1,9 @@
 package aldtoll.godswars
 
 import aldtoll.godswars.ext.replaceFragment
-import aldtoll.godswars.screen.game_screen.GameScreen
+import aldtoll.godswars.routing.NowScreen
+import aldtoll.godswars.screen.game_screen.guest_screen.GuestsScreen
+import aldtoll.godswars.screen.game_screen.watchman_screen.WatchmanScreen
 import aldtoll.godswars.screen.map_screen.MapEditorScreen
 import aldtoll.godswars.screen.select_player_screen.SelectPlayerScreen
 import aldtoll.godswars.screen.start_screen.StartScreen
@@ -25,12 +27,9 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.START_SCREEN -> showStartScreen()
                 NowScreen.MAP_SCREEN -> showMapScreen()
                 NowScreen.SELECT_PLAYER_SCREEN -> showSelectPlayerScreen()
-                NowScreen.GAME_SCREEN -> showGameScreen()
+                NowScreen.GUESTS_SCREEN -> showGuestScreen()
+                NowScreen.WATCHMAN_SCREEN -> showWatchmanScreen()
                 NowScreen.CLOSE_SCREEN -> closeAll()
-//                NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
-//                NowScreen.HISTORY_SCREEN -> showHistoryScreen()
-//                NowScreen.QUEST_SCREEN -> showQuestScreen()
-//                NowScreen.FINISH_SCREEN -> showFinishScreen()
             }
         })
     }
@@ -58,8 +57,12 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(SelectPlayerScreen.newInstance())
     }
 
-    private fun showGameScreen() {
-        replaceFragment(GameScreen.newInstance())
+    private fun showGuestScreen() {
+        replaceFragment(GuestsScreen.newInstance())
+    }
+
+    private fun showWatchmanScreen() {
+        replaceFragment(WatchmanScreen.newInstance())
     }
 //
 //    private fun showQuestScreen() {
