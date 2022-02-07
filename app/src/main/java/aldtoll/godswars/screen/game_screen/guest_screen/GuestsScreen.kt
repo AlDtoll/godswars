@@ -44,53 +44,47 @@ class GuestsScreen : Fragment() {
     }
 
     private fun initUi() {
-        guestsScreenViewModel.cellsData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.cellsData().observe(viewLifecycleOwner) {
             it?.run {
                 showCellsData(it)
             }
-        })
+        }
 
         initActionPoints()
 
-        guestsScreenViewModel.enableTurnButtonData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.enableTurnButtonData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.guestsScreenEndTurnButton.isEnabled = it
             }
-        })
+        }
 
-        guestsScreenViewModel.turnButtonTextData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.turnButtonTextData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.guestsScreenEndTurnButton.text = it
             }
-        })
+        }
 
-        guestsScreenViewModel.currentStatusTextData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.currentStatusTextData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.guestsScreenPlayerTurnStatus.text = it
             }
-        })
+        }
 
-        guestsScreenViewModel.isArrivedData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.isArrivedData().observe(viewLifecycleOwner) {
             it?.run {
                 guestsCellsAdapter?.arrived = it
             }
-        })
+        }
 
-        guestsScreenViewModel.actionPointsData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.actionPointsData().observe(viewLifecycleOwner) {
             showActionPointData(it)
-        })
+        }
 
-        guestsScreenViewModel.personsData().observe(viewLifecycleOwner, {
+        guestsScreenViewModel.personsData().observe(viewLifecycleOwner) {
             showPersons(it)
-        })
+        }
 
-        guestsScreenViewModel.selectedPersonData().observe(viewLifecycleOwner, {
-            it?.run {
-                if (it != Person.nobody()) {
-                    showPerson(it)
-                }
-            }
-        })
+        initSelectedPersonCardLogic()
 
         binding.guestsScreenEndTurnButton.setOnClickListener {
             guestsScreenViewModel.endTurn()
@@ -98,6 +92,28 @@ class GuestsScreen : Fragment() {
 
         initMap()
         initPersons()
+    }
+
+    private fun initSelectedPersonCardLogic() {
+        guestsScreenViewModel.selectedPersonData().observe(viewLifecycleOwner) {
+            it?.run {
+                if (it != Person.nobody()) {
+                    showSelectedPerson(it)
+                }
+            }
+        }
+
+        guestsScreenViewModel.selectedPersonCardVisibility().observe(viewLifecycleOwner) {
+            binding.guestsScreenPersonCard.root.visibility = View.VISIBLE
+        }
+
+        binding.guestsScreenPersonCard.root.setOnClickListener {
+            clickSelectedPersonCard()
+        }
+    }
+
+    private fun clickSelectedPersonCard() {
+        guestsScreenViewModel.selectPerson(Person.nobody())
     }
 
     private val guestsCellCallback = object : GuestsCellsAdapter.Callback {
@@ -163,7 +179,6 @@ class GuestsScreen : Fragment() {
 
         override fun selectPerson(person: Person) {
             guestsScreenViewModel.selectPerson(person)
-            guestsCellsAdapter?.selectedPerson = person
         }
     }
 
@@ -176,12 +191,7 @@ class GuestsScreen : Fragment() {
         personsAdapter.items = ArrayList(persons)
     }
 
-    private fun showPerson(person: Person) {
-        binding.guestsScreenPersonCard.root.visibility = View.VISIBLE
-        binding.guestsScreenPersonCard.root.setOnClickListener {
-            binding.guestsScreenPersonCard.root.visibility = View.GONE
-            guestsScreenViewModel.selectPerson(Person.nobody())
-        }
+    private fun showSelectedPerson(person: Person) {
         if (person is Guest) {
             binding.guestsScreenPersonCard.personName.text = person.name
         }

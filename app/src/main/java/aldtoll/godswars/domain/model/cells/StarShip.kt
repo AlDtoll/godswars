@@ -185,6 +185,12 @@ class StarShip {
         }
     }
 
+    fun deselectAll() {
+        cells.forEach {
+            it.selected = false
+        }
+    }
+
     fun disabledAll() {
         cells.forEach {
             it.disable()

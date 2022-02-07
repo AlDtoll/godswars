@@ -19,8 +19,6 @@ class PersonsAdapter(
             notifyDataSetChanged()
         }
 
-    var selectedPerson: Person? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder {
         return PersonHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -40,7 +38,6 @@ class PersonsAdapter(
             }
             this.setOnClickListener {
                 callback.selectPerson(item)
-                selectedPerson = item
             }
             val hp = "${item.hp}%"
             personHp.text = hp

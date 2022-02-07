@@ -4,6 +4,8 @@ import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.executor.EndTurnInteractor
 import aldtoll.godswars.domain.executor.IEndTurnInteractor
+import aldtoll.godswars.domain.logic.ISelectedPersonCardVisibility
+import aldtoll.godswars.domain.logic.SelectedPersonCardVisibility
 import aldtoll.godswars.domain.storage.*
 import aldtoll.godswars.routing.*
 import aldtoll.godswars.screen.game_screen.guest_screen.GuestsScreenViewModel
@@ -33,6 +35,8 @@ val appModule = module {
     single { MapScreenEditorScreenViewModel(get(), get()) as IMapEditorScreenViewModel }
     single {
         GuestsScreenViewModel(
+            get(),
+            get(),
             get(),
             get(),
             get(),
@@ -98,7 +102,19 @@ val appModule = module {
     single { WatchmanInteractor() as IWatchmanInteractor }
     single { SelectedPersonListInteractor() as ISelectedPersonListInteractor }
 
-    single { EndTurnInteractor(get(), get(), get(), get(), get()) as IEndTurnInteractor }
+    single { EndTurnInteractor(get(), get(), get(), get(), get(), get()) as IEndTurnInteractor }
+
+    single {
+        SelectedPersonCardVisibility(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as ISelectedPersonCardVisibility
+    }
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }

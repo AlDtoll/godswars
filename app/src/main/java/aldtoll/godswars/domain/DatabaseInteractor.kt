@@ -27,7 +27,7 @@ class DatabaseInteractor(
         const val ROOM_COLUMN_NUMBER = 6
         private const val VERTICAL_WALL_NUMBER = ROOM_COLUMN_NUMBER - 1
         const val COLUMN_NUMBER = ROOM_COLUMN_NUMBER + VERTICAL_WALL_NUMBER
-        const val ROW_NUMBER = 10
+        const val ROW_NUMBER = 11
     }
 
     private val database = Firebase.database

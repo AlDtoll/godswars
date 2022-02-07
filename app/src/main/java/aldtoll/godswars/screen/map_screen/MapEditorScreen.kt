@@ -41,11 +41,11 @@ class MapEditorScreen : Fragment() {
     }
 
     private fun initUi() {
-        mapEditorScreenViewModel.cellsData().observe(viewLifecycleOwner, {
+        mapEditorScreenViewModel.cellsData().observe(viewLifecycleOwner) {
             it?.run {
                 showData(it)
             }
-        })
+        }
 
         binding.roomCell.setOnClickListener {
             cellType = Cell.Type.ROOM
@@ -63,7 +63,7 @@ class MapEditorScreen : Fragment() {
             cellType = Cell.Type.PIER
         }
 
-        initRecyclerView()
+        initMapForEdit()
     }
 
     private val callback = object : MapEditorCellsAdapter.Callback {
@@ -79,7 +79,7 @@ class MapEditorScreen : Fragment() {
     private lateinit var mapEditorCellsAdapter: MapEditorCellsAdapter
 
 
-    private fun initRecyclerView() {
+    private fun initMapForEdit() {
         mapEditorCellsAdapter = MapEditorCellsAdapter(callback)
         binding.cells.adapter = mapEditorCellsAdapter
         val value = object : GridLayoutManager.SpanSizeLookup() {

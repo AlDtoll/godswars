@@ -29,8 +29,6 @@ class GuestsCellsAdapter(
             notifyDataSetChanged()
         }
 
-    var selectedPerson: Person? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             MapEditorCellsAdapter.ROOM -> MapEditorCellsAdapter.RoomHolder(
@@ -72,7 +70,6 @@ class GuestsCellsAdapter(
         when (getItemViewType(position)) {
             MapEditorCellsAdapter.ROOM -> {
                 holder.itemView.run {
-                    roomSelect.visibility = View.GONE
                     this.setOnClickListener {
                         callback.clickCell(item)
                         notifyDataSetChanged()
@@ -83,12 +80,11 @@ class GuestsCellsAdapter(
             }
             MapEditorCellsAdapter.VERTICAL, MapEditorCellsAdapter.HORIZONTAL -> {
                 holder.itemView.run {
-                    wallSelect.visibility = View.GONE
-                    this.setOnClickListener {
-                        callback.clickCell(item)
-                        notifyDataSetChanged()
-                        callback.saveCellsLocal()
-                    }
+//                    this.setOnClickListener {
+//                        callback.clickCell(item)
+//                        notifyDataSetChanged()
+//                        callback.saveCellsLocal()
+//                    }
                     defineCell(wall, wallFog, wallSelect, wallEnabled, item)
                 }
             }

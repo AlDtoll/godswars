@@ -47,59 +47,59 @@ class WatchmanScreen : Fragment() {
     }
 
     private fun initUi() {
-        watchmanScreenViewModel.cellsData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.cellsData().observe(viewLifecycleOwner) {
             it?.run {
                 showCellsData(it)
             }
-        })
+        }
 
         initActionPoints()
 
-        watchmanScreenViewModel.enableTurnButtonData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.enableTurnButtonData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.watchmanScreenEndTurnButton.isEnabled = it
             }
-        })
+        }
 
-        watchmanScreenViewModel.turnButtonTextData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.turnButtonTextData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.watchmanScreenEndTurnButton.text = it
             }
-        })
+        }
 
-        watchmanScreenViewModel.currentStatusTextData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.currentStatusTextData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.watchmanScreenPlayerTurnStatus.text = it
             }
-        })
+        }
 
-        watchmanScreenViewModel.cellsPanelVisibilityData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.cellsPanelVisibilityData().observe(viewLifecycleOwner) {
             it?.run {
                 binding.watchmanScreenCellsPanel.visibility = if (it) View.VISIBLE else View.GONE
             }
-        })
+        }
 
-        watchmanScreenViewModel.isPlacedData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.isPlacedData().observe(viewLifecycleOwner) {
             it?.run {
                 watchmanCellsAdapter?.placed = it
             }
-        })
+        }
 
-        watchmanScreenViewModel.actionPointsData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.actionPointsData().observe(viewLifecycleOwner) {
             showActionPointData(it)
-        })
+        }
 
-        watchmanScreenViewModel.personsData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.personsData().observe(viewLifecycleOwner) {
             showPersons(it)
-        })
+        }
 
-        watchmanScreenViewModel.selectedPersonData().observe(viewLifecycleOwner, {
+        watchmanScreenViewModel.selectedPersonData().observe(viewLifecycleOwner) {
             it?.run {
                 if (it != Person.nobody()) {
                     showPerson(it)
                 }
             }
-        })
+        }
 
         createCellsPanel()
 

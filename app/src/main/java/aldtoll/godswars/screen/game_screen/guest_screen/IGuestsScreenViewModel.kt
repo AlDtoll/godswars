@@ -4,7 +4,6 @@ import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.cells.Cell
 import aldtoll.godswars.domain.model.unit.Person
 import androidx.lifecycle.LiveData
-import java.util.*
 
 interface IGuestsScreenViewModel {
 
@@ -28,8 +27,9 @@ interface IGuestsScreenViewModel {
 
     fun selectPerson(person: Person)
 
-    fun selectedPersonData(): LiveData<Person>
+    fun selectedPersonData(): LiveData<Person?>
 
     fun clickCell(item: Cell)
 
+    fun selectedPersonCardVisibility(): LiveData<Boolean>
 }
