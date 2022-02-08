@@ -7,6 +7,7 @@ import aldtoll.godswars.domain.model.cells.Cell
 import aldtoll.godswars.domain.model.cells.StarShip
 import aldtoll.godswars.domain.model.unit.Guest
 import aldtoll.godswars.domain.model.unit.Person
+import aldtoll.godswars.ext.setVisibility
 import aldtoll.godswars.screen.game_screen.ActionPointsAdapter
 import aldtoll.godswars.screen.game_screen.PersonsAdapter
 import android.os.Bundle
@@ -44,13 +45,12 @@ class GuestsScreen : Fragment() {
     }
 
     private fun initUi() {
+        initMap()
         guestsScreenViewModel.cellsData().observe(viewLifecycleOwner) {
             it?.run {
                 showCellsData(it)
             }
         }
-
-        initActionPoints()
 
         guestsScreenViewModel.enableTurnButtonData().observe(viewLifecycleOwner) {
             it?.run {
@@ -76,12 +76,15 @@ class GuestsScreen : Fragment() {
             }
         }
 
+        initActionPoints()
+
         guestsScreenViewModel.actionPointsData().observe(viewLifecycleOwner) {
             showActionPointData(it)
         }
 
-        guestsScreenViewModel.personsData().observe(viewLifecycleOwner) {
-            showPersons(it)
+        initPersons()
+        guestsScreenViewModel.selectedPersonsData().observe(viewLifecycleOwner) {
+            showSelectedPersonsInLst(it)
         }
 
         initSelectedPersonCardLogic()
@@ -90,21 +93,16 @@ class GuestsScreen : Fragment() {
             guestsScreenViewModel.endTurn()
         }
 
-        initMap()
-        initPersons()
     }
 
     private fun initSelectedPersonCardLogic() {
         guestsScreenViewModel.selectedPersonData().observe(viewLifecycleOwner) {
             it?.run {
-                if (it != Person.nobody()) {
-                    showSelectedPerson(it)
+                if (this != Person.nobody()) {
+                    showSelectedPerson(this)
                 }
+                binding.guestsScreenPersonCard.root.setVisibility(this != Person.nobody())
             }
-        }
-
-        guestsScreenViewModel.selectedPersonCardVisibility().observe(viewLifecycleOwner) {
-            binding.guestsScreenPersonCard.root.visibility = View.VISIBLE
         }
 
         binding.guestsScreenPersonCard.root.setOnClickListener {
@@ -113,7 +111,7 @@ class GuestsScreen : Fragment() {
     }
 
     private fun clickSelectedPersonCard() {
-        guestsScreenViewModel.selectPerson(Person.nobody())
+        guestsScreenViewModel.clickPerson(Person.nobody())
     }
 
     private val guestsCellCallback = object : GuestsCellsAdapter.Callback {
@@ -164,30 +162,30 @@ class GuestsScreen : Fragment() {
         binding.guestsScreenActionPoints.adapter = actionPointsAdapter
     }
 
+    private fun showActionPointData(actionPoints: List<ActionPoint>) {
+        actionPointsAdapter.items = ArrayList(actionPoints)
+    }
+
     private fun showCellsData(cells: List<Cell>) {
         val starShip = StarShip()
         starShip.cells = ArrayList(cells)
         guestsCellsAdapter?.starShip = starShip
     }
 
-    private fun showActionPointData(actionPoints: List<ActionPoint>) {
-        actionPointsAdapter.items = ArrayList(actionPoints)
-    }
-
     private lateinit var personsAdapter: PersonsAdapter
     private val personCallback = object : PersonsAdapter.Callback {
 
         override fun selectPerson(person: Person) {
-            guestsScreenViewModel.selectPerson(person)
+            guestsScreenViewModel.clickPerson(person)
         }
     }
 
     private fun initPersons() {
         personsAdapter = PersonsAdapter(personCallback)
-        binding.guestsScreenPersonsList.adapter = personsAdapter
+        binding.guestsScreenSelectedPersonsList.adapter = personsAdapter
     }
 
-    private fun showPersons(persons: List<Person>) {
+    private fun showSelectedPersonsInLst(persons: List<Person>) {
         personsAdapter.items = ArrayList(persons)
     }
 

@@ -1,10 +1,10 @@
 package aldtoll.godswars.domain.executor
 
 import aldtoll.godswars.App
+import aldtoll.godswars.domain.logic.ISelectedPersonListInteractor
 import aldtoll.godswars.domain.model.cells.Cell
 import aldtoll.godswars.domain.storage.IArrivedInteractor
 import aldtoll.godswars.domain.storage.IGuestNameInteractor
-import aldtoll.godswars.domain.storage.ISelectedPersonListInteractor
 
 class ClickCellIntreactor(
     private val guestNameInteractor: IGuestNameInteractor,

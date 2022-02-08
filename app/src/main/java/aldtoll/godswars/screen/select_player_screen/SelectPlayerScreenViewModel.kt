@@ -2,8 +2,9 @@ package aldtoll.godswars.screen.select_player_screen
 
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
-import aldtoll.godswars.domain.model.ActionPoint
-import aldtoll.godswars.domain.storage.*
+import aldtoll.godswars.domain.storage.IGuestNameInteractor
+import aldtoll.godswars.domain.storage.IPlayerTurnInteractor
+import aldtoll.godswars.domain.storage.IWatchmanNameInteractor
 import aldtoll.godswars.routing.RouteToGuestsScreenInteractor
 import aldtoll.godswars.routing.RouteToWatchmanScreenInteractor
 import androidx.lifecycle.LiveData
@@ -19,12 +20,7 @@ class SelectPlayerScreenViewModel(
     private val watchmanNameInteractor: IWatchmanNameInteractor,
     private val routeToGuestsScreenInteractor: RouteToGuestsScreenInteractor,
     private val routeToWatchmanScreenInteractor: RouteToWatchmanScreenInteractor,
-    private val playerTurnInteractor: IPlayerTurnInteractor,
-    private val actionPointsInteractor: IActionPointsInteractor,
-    private val watchmanInteractor: IWatchmanInteractor,
-    private val guestListInteractor: IGuestListInteractor,
-    private val selectedPersonListInteractor: ISelectedPersonListInteractor,
-    private val arrivedInteractor: IArrivedInteractor
+    private val playerTurnInteractor: IPlayerTurnInteractor
 ) : ISelectPlayerScreenViewModel {
 
     private var guestName = PublishSubject.create<String>()
@@ -73,21 +69,8 @@ class SelectPlayerScreenViewModel(
         if (gameNotStartedYet) {
             databaseInteractor.giveTurnToWatchman()
         }
-        val playerName = App.getPref()?.getString("playerName", "")
-        val isWatchman = playerName != guestNameInteractor.value()
-        if (isWatchman) {
-            val watchman = watchmanInteractor.value()
-            val actionPoints = mutableListOf<ActionPoint>()
-            for (i in 1..watchman.maxCp) {
-                actionPoints.add(ActionPoint())
-            }
-            actionPointsInteractor.update(actionPoints)
-        } else {
-            if (!arrivedInteractor.value()) {
-                val guests = guestListInteractor.value()
-                selectedPersonListInteractor.update(guests.toMutableList())
-            }
-        }
+        val localPlayerName = App.getPref()?.getString("playerName", "")
+        val isWatchman = localPlayerName != guestNameInteractor.value()
         if (isWatchman) {
             routeToWatchmanScreenInteractor.execute()
         } else {

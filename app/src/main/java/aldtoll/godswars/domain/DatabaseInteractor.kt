@@ -19,7 +19,7 @@ class DatabaseInteractor(
     private val playerTurnInteractor: IPlayerTurnInteractor,
     private val placedInteractor: IPlacedInteractor,
     private val arrivedInteractor: IArrivedInteractor,
-    private val guestListInteractor: IGuestListInteractor,
+    private val remoteGuestListInteractor: IRemoteGuestListInteractor,
     private val watchmanInteractor: IWatchmanInteractor
 ) : IDatabaseInteractor {
 
@@ -194,7 +194,7 @@ class DatabaseInteractor(
                         arrayList.forEach {
                             guests.add(Guest.fromMap(it))
                         }
-                        guestListInteractor.update(guests)
+                        remoteGuestListInteractor.update(guests)
                     }
                 }
                 if (value == null) {
@@ -299,7 +299,7 @@ class DatabaseInteractor(
             Guest()
         )
         myRef.setValue(list)
-        guestListInteractor.update(list)
+        remoteGuestListInteractor.update(list)
     }
 
     private fun clearWatchman() {

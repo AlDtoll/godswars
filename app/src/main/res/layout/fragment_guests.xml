@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/guestsScreenPersonsList"
+        android:id="@+id/guests_screen_selected_persons_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_small_8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guestsScreenPersonsList"
+        app:layout_constraintTop_toBottomOf="@id/guests_screen_selected_persons_list"
         tools:text="Твой ход" />
 
     <androidx.recyclerview.widget.RecyclerView

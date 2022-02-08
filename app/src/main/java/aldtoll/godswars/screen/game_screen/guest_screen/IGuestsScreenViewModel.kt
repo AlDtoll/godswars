@@ -23,13 +23,11 @@ interface IGuestsScreenViewModel {
 
     fun actionPointsData(): LiveData<MutableList<ActionPoint>>
 
-    fun personsData(): LiveData<MutableList<Person>>
+    fun selectedPersonsData(): LiveData<List<Person>>
 
-    fun selectPerson(person: Person)
+    fun clickPerson(person: Person)
 
-    fun selectedPersonData(): LiveData<Person?>
+    fun selectedPersonData(): LiveData<Person>
 
     fun clickCell(item: Cell)
-
-    fun selectedPersonCardVisibility(): LiveData<Boolean>
 }

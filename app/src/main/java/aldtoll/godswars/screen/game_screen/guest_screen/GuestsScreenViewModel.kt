@@ -1,9 +1,10 @@
 package aldtoll.godswars.screen.game_screen.guest_screen
 
 import aldtoll.godswars.App
-import aldtoll.godswars.domain.executor.IClickCellIntreactor
 import aldtoll.godswars.domain.executor.IEndTurnInteractor
-import aldtoll.godswars.domain.logic.ISelectedPersonCardVisibility
+import aldtoll.godswars.domain.logic.IActionPointsInteractor
+import aldtoll.godswars.domain.logic.ISelectedPersonInteractor
+import aldtoll.godswars.domain.logic.ISelectedPersonListInteractor
 import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.cells.Cell
 import aldtoll.godswars.domain.model.cells.StarShip
@@ -21,11 +22,11 @@ class GuestsScreenViewModel(
     private val placedInteractor: IPlacedInteractor,
     private val arrivedInteractor: IArrivedInteractor,
     private val actionPointsInteractor: IActionPointsInteractor,
+    private val personInteractor: IPersonInteractor,
     private val selectedPersonInteractor: ISelectedPersonInteractor,
     private val selectedPersonListInteractor: ISelectedPersonListInteractor,
     private val endTurnInteractor: IEndTurnInteractor,
-    private val clickCellInteractor: IClickCellIntreactor,
-    private val selectedPersonCardVisibility: ISelectedPersonCardVisibility
+    private val selectedCellInteractor: ISelectedCellInteractor
 ) : IGuestsScreenViewModel {
 
     companion object {
@@ -128,35 +129,25 @@ class GuestsScreenViewModel(
         )
     }
 
-    override fun personsData(): LiveData<MutableList<Person>> {
-        val observable = Observable.combineLatest(
-            selectedPersonListInteractor.get(),
-            arrivedInteractor.get()
-        ) { guests: MutableList<Person>, arrived: Boolean ->
-            guests
-        }
+    override fun selectedPersonsData(): LiveData<List<Person>> {
         return LiveDataReactiveStreams.fromPublisher(
-            observable.toFlowable(BackpressureStrategy.LATEST)
+            selectedPersonListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
-    override fun selectPerson(person: Person) {
-        selectedPersonInteractor.update(person)
+    override fun clickPerson(person: Person) {
+        personInteractor.update(person)
     }
 
-    override fun selectedPersonData(): LiveData<Person?> {
+    override fun selectedPersonData(): LiveData<Person> {
         return LiveDataReactiveStreams.fromPublisher(
             selectedPersonInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
-    override fun selectedPersonCardVisibility(): LiveData<Boolean> {
-        return LiveDataReactiveStreams.fromPublisher(
-            selectedPersonCardVisibility.get().toFlowable(BackpressureStrategy.LATEST)
-        )
-    }
-
     override fun clickCell(item: Cell) {
+        selectedCellInteractor.update(item)
+
         if (!arrivedInteractor.value()) {
             if (item.type == Cell.Type.PIER) {
                 val selectedGuests = selectedPersonListInteractor.value()
@@ -175,7 +166,7 @@ class GuestsScreenViewModel(
                 }
             }
         } else {
-            val selectedPerson = selectedPersonInteractor.value()
+            val selectedPerson = personInteractor.value()
             if (selectedPerson != null && selectedPerson != Person.nobody()) {
                 if (canBeMoved(item.position.toInt(), selectedPerson)) {
                     movePerson(item)
@@ -202,7 +193,7 @@ class GuestsScreenViewModel(
     }
 
     private fun movePerson(item: Cell) {
-        val selectedPerson = selectedPersonInteractor.value()
+        val selectedPerson = personInteractor.value()
         val cellsWithPersons =
             starShip.cells.filter { !it.persons.isNullOrEmpty() }
         val previousCellWhereWasPerson = cellsWithPersons.find {
@@ -221,11 +212,7 @@ class GuestsScreenViewModel(
     private fun updateActionPoints(selectedPerson: Person) {
         val ap = selectedPerson.ap
         selectedPerson.ap = ap - ACTION_POINTS_FOR_MOVE
-        selectPerson(selectedPerson)
-    }
-
-    private fun selectPersons(persons: List<Person>) {
-        selectedPersonListInteractor.update(persons as MutableList<Person>)
+        clickPerson(selectedPerson)
     }
 
     private fun canBeMoved(position: Int, selectedPerson: Person): Boolean {

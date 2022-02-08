@@ -2,8 +2,12 @@ package aldtoll.godswars.domain.executor
 
 import aldtoll.godswars.App
 import aldtoll.godswars.domain.IDatabaseInteractor
+import aldtoll.godswars.domain.logic.ISelectedPersonListInteractor
 import aldtoll.godswars.domain.model.unit.Person
-import aldtoll.godswars.domain.storage.*
+import aldtoll.godswars.domain.storage.IArrivedInteractor
+import aldtoll.godswars.domain.storage.ICellsListInteractor
+import aldtoll.godswars.domain.storage.IGuestNameInteractor
+import aldtoll.godswars.domain.storage.IPlacedInteractor
 
 class EndTurnInteractor(
     private val guestNameInteractor: IGuestNameInteractor,
@@ -23,7 +27,6 @@ class EndTurnInteractor(
         if (isGuest) {
             if (!arrived) {
                 databaseInteractor.arrived(true)
-                selectedPersonListInteractor.update(mutableListOf())
             }
             updateActionPoints()
             databaseInteractor.giveTurnToWatchman()

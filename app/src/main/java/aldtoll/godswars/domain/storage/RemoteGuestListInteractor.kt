@@ -4,7 +4,7 @@ import aldtoll.godswars.domain.model.unit.Guest
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-class GuestListInteractor : IGuestListInteractor {
+class RemoteGuestListInteractor : IRemoteGuestListInteractor {
 
     private val list = BehaviorSubject.create<MutableList<Guest>>()
 

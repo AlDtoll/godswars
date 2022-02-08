@@ -33,6 +33,8 @@ data class Cell(
                 persons
             )
         }
+
+        fun nothing(): Cell = Cell(400)
     }
 
     fun getDrawable(): Int {

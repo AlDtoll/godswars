@@ -4,8 +4,7 @@ import aldtoll.godswars.domain.DatabaseInteractor
 import aldtoll.godswars.domain.IDatabaseInteractor
 import aldtoll.godswars.domain.executor.EndTurnInteractor
 import aldtoll.godswars.domain.executor.IEndTurnInteractor
-import aldtoll.godswars.domain.logic.ISelectedPersonCardVisibility
-import aldtoll.godswars.domain.logic.SelectedPersonCardVisibility
+import aldtoll.godswars.domain.logic.*
 import aldtoll.godswars.domain.storage.*
 import aldtoll.godswars.routing.*
 import aldtoll.godswars.screen.game_screen.guest_screen.GuestsScreenViewModel
@@ -68,11 +67,6 @@ val appModule = module {
             get(),
             get(),
             get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
             get()
         ) as ISelectPlayerScreenViewModel
     }
@@ -96,16 +90,8 @@ val appModule = module {
     single { PlayerTurnInteractor() as IPlayerTurnInteractor }
     single { PlacedInteractor() as IPlacedInteractor }
     single { ArrivedInteractor() as IArrivedInteractor }
-    single { ActionPointsInteractor() as IActionPointsInteractor }
-    single { GuestListInteractor() as IGuestListInteractor }
-    single { SelectedPersonInteractor() as ISelectedPersonInteractor }
-    single { WatchmanInteractor() as IWatchmanInteractor }
-    single { SelectedPersonListInteractor() as ISelectedPersonListInteractor }
-
-    single { EndTurnInteractor(get(), get(), get(), get(), get(), get()) as IEndTurnInteractor }
-
     single {
-        SelectedPersonCardVisibility(
+        ActionPointsInteractor(
             get(),
             get(),
             get(),
@@ -113,8 +99,36 @@ val appModule = module {
             get(),
             get(),
             get()
-        ) as ISelectedPersonCardVisibility
+        ) as IActionPointsInteractor
     }
+    single { RemoteGuestListInteractor() as IRemoteGuestListInteractor }
+    single { PersonInteractor() as IPersonInteractor }
+    single { WatchmanInteractor() as IWatchmanInteractor }
+    single { SelectedCellInteractor() as ISelectedCellInteractor }
+
+    single { EndTurnInteractor(get(), get(), get(), get(), get(), get()) as IEndTurnInteractor }
+
+    single {
+        SelectedPersonInteractor(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as ISelectedPersonInteractor
+    }
+
+    single {
+        SelectedPersonListInteractor(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(), get(), get(), get(), get()
+        ) as ISelectedPersonListInteractor
+    }
+
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
