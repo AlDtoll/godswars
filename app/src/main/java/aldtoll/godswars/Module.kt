@@ -104,7 +104,7 @@ val appModule = module {
     single { RemoteGuestListInteractor() as IRemoteGuestListInteractor }
     single { PersonInteractor() as IPersonInteractor }
     single { WatchmanInteractor() as IWatchmanInteractor }
-    single { SelectedCellInteractor() as ISelectedCellInteractor }
+    single { CellInteractor() as ICellInteractor }
 
     single { EndTurnInteractor(get(), get(), get(), get(), get(), get()) as IEndTurnInteractor }
 

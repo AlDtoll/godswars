@@ -3,7 +3,7 @@ package aldtoll.godswars.domain.storage
 import aldtoll.godswars.domain.model.cells.Cell
 import io.reactivex.Observable
 
-interface ISelectedCellInteractor {
+interface ICellInteractor {
 
     fun update(cell: Cell)
 

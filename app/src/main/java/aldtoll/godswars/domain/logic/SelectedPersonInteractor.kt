@@ -17,7 +17,7 @@ class SelectedPersonInteractor(
 
     private val localPlayerName = App.getPref()?.getString("playerName", "")
 
-    override fun get(): Observable<Person> {
+    override fun data(): Observable<Person> {
         val observable = Observable.combineLatest(
             personInteractor.get(),
             arrivedInteractor.get(),

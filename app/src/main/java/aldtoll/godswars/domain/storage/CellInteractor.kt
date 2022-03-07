@@ -4,7 +4,7 @@ import aldtoll.godswars.domain.model.cells.Cell
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-class SelectedCellInteractor : ISelectedCellInteractor {
+class CellInteractor : ICellInteractor {
 
     private val item = BehaviorSubject.create<Cell>()
 

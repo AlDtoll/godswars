@@ -144,7 +144,7 @@ class WatchmanScreenViewModel(
 
     override fun personsData(): LiveData<MutableList<Person>> {
         val observable = Observable.combineLatest(
-            selectedPersonListInteractor.get(),
+            selectedPersonListInteractor.data(),
             arrivedInteractor.get()
         ) { guests: MutableList<Person>, arrived: Boolean ->
             mutableListOf<Person>()

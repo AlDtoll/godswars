@@ -16,17 +16,17 @@ class SelectedPersonListInteractor(
     private val databaseInteractor: IDatabaseInteractor,
     private val cellsListInteractor: ICellsListInteractor,
     private val remoteGuestListInteractor: IRemoteGuestListInteractor,
-    private val selectedCellInteractor: ISelectedCellInteractor
+    private val cellInteractor: ICellInteractor
 ) : ISelectedPersonListInteractor {
 
     private val localPlayerName = App.getPref()?.getString("playerName", "")
 
-    override fun get(): Observable<List<Person>> {
+    override fun data(): Observable<List<Person>> {
         val observable = Observable.combineLatest(
             arrivedInteractor.get(),
             guestNameInteractor.get(),
             remoteGuestListInteractor.get(),
-            selectedCellInteractor.get()
+            cellInteractor.get()
         ) { arrived: Boolean, guestName: String, remoteGuestsList, selectedCell: Cell ->
             val isGuest = guestName == localPlayerName
             if (isGuest) {

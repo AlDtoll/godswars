@@ -5,5 +5,5 @@ import io.reactivex.Observable
 
 interface ISelectedPersonListInteractor {
 
-    fun get(): Observable<List<Person>>
+    fun data(): Observable<List<Person>>
 }

@@ -24,7 +24,7 @@ class ActionPointsInteractor(
 
     override fun get(): Observable<MutableList<ActionPoint>> {
         val observable = Observable.combineLatest(
-            selectedPersonInteractor.get(),
+            selectedPersonInteractor.data(),
             arrivedInteractor.get(),
             guestNameInteractor.get(),
         ) { person: Person, arrived: Boolean, guestName: String ->

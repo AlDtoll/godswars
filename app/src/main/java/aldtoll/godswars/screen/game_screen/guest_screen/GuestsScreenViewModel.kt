@@ -1,13 +1,13 @@
 package aldtoll.godswars.screen.game_screen.guest_screen
 
 import aldtoll.godswars.App
+import aldtoll.godswars.domain.executor.IClickCellIntreactor
 import aldtoll.godswars.domain.executor.IEndTurnInteractor
 import aldtoll.godswars.domain.logic.IActionPointsInteractor
 import aldtoll.godswars.domain.logic.ISelectedPersonInteractor
 import aldtoll.godswars.domain.logic.ISelectedPersonListInteractor
 import aldtoll.godswars.domain.model.ActionPoint
 import aldtoll.godswars.domain.model.cells.Cell
-import aldtoll.godswars.domain.model.cells.StarShip
 import aldtoll.godswars.domain.model.unit.Person
 import aldtoll.godswars.domain.storage.*
 import androidx.lifecycle.LiveData
@@ -26,7 +26,8 @@ class GuestsScreenViewModel(
     private val selectedPersonInteractor: ISelectedPersonInteractor,
     private val selectedPersonListInteractor: ISelectedPersonListInteractor,
     private val endTurnInteractor: IEndTurnInteractor,
-    private val selectedCellInteractor: ISelectedCellInteractor
+    private val cellInteractor: ICellInteractor,
+    private val clickCellIntreactor: IClickCellIntreactor
 ) : IGuestsScreenViewModel {
 
     companion object {
@@ -34,7 +35,6 @@ class GuestsScreenViewModel(
     }
 
     private val localPlayerName = App.getPref()?.getString("playerName", "")
-    private val starShip = StarShip()
 
     override fun saveCellsLocal(cells: ArrayList<Cell>) {
         cellsListInteractor.update(cells)
@@ -42,10 +42,7 @@ class GuestsScreenViewModel(
 
     override fun cellsData(): LiveData<MutableList<Cell>> {
         return LiveDataReactiveStreams.fromPublisher(
-            cellsListInteractor.get().map {
-                starShip.cells = ArrayList(it)
-                it
-            }.toFlowable(BackpressureStrategy.LATEST)
+            cellsListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
@@ -131,7 +128,7 @@ class GuestsScreenViewModel(
 
     override fun selectedPersonsData(): LiveData<List<Person>> {
         return LiveDataReactiveStreams.fromPublisher(
-            selectedPersonListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+            selectedPersonListInteractor.data().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
@@ -141,12 +138,13 @@ class GuestsScreenViewModel(
 
     override fun selectedPersonData(): LiveData<Person> {
         return LiveDataReactiveStreams.fromPublisher(
-            selectedPersonInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+            selectedPersonInteractor.data().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
     override fun clickCell(item: Cell) {
-        selectedCellInteractor.update(item)
+        cellInteractor.update(item)
+        clickCellIntreactor.execute(item)
 
         if (!arrivedInteractor.value()) {
             if (item.type == Cell.Type.PIER) {
